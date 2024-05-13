@@ -1,70 +1,47 @@
 <!DOCTYPE html>
 <html>
     <head>
+
         <style>
             .button {
                 height: 100px;
                 width: 100px;
+                font-size: xx-large;
             }
         </style>
+
         <script>
+            //!!! NOTE: ibig sabihin ng NODE ay STATE din, so ang start state at final state pareho lang sa
+            //                start node at end node
 
-            // Returns a Promise that resolves after "ms" Milliseconds
-            const timer = ms => new Promise(res => setTimeout(res, ms))
-
-            //async function load () { // We need to wrap the loop into an async function for this to work
-            //    for (var i = 0; i < 3; i++) {
-            //        console.log(i);
-            //        await timer(3000); // then the created Promise can be awaited
-            //    }
-           // }
-            var traversedNodes = ["Start node"];
+            //list of all nodes that the string has "traversed or visited", is used for showing the path through DFA
+            let traversedNodes = [];
+            //website starts with DFA1 opened
+            let currentDFA ="DFA1";
+            let currentNode="";
+            //list of all nodes in the dfa, para lang sa pagclear tuwing run
+            var allNodes = ["startNodeNum", "node2Num", "node3Num", "node4Num","node5Num",
+                                    "node6Num","node7Num","node8Num","endNodeNum"]
             let inputString = "";
+            let is_string_valid = null;
 
-            async function changeColor(){
-                for (let node of traversedNodes){
-                    document.getElementById(node).style.fill = "green";
-                    await timer(500);
+
+            //runs through the string and checks each letter of string to check where it goes in the DFA
+             function getTraversedNodes(){
+                //reset traversedNodes to default state before next run
+                traversedNodes = [];
+                
+                //start traversal of nodes from start node (syempre magsisimula sa start state talaga ba)
+                
+                if (currentDFA == "DFA1"){
+                    traversedNodes = ["startNodeLet"];
                     
-                }                
-                //alert(traversedNodes);
-            }
-
-            class node{
-                constructor(a, b, nodeID){
-                    this.a = a;
-                    this.b = b;
-                    this.nodeID = (nodeID);
                 }
-            }
-
-            const endNode = new node(null, null, "End node");
-                endNode.a = endNode;
-                endNode.b = endNode;
-
-            const node8 = new node(endNode, null, "node8");
-            const node7 = new node(endNode, node8, "node7");
-            const node6 = new node(node7, node8, "node6");
-            const node5 = new node(node6, null, "node5");
-                node5.b = node5;
-                node8.b = node5;
-            const node4 = new node(node5, node5, "node4");
-            const node3 = new node(null, node4, "node3");
-            const node2 = new node(node4, node3, "node2");      
-                node3.a = node2;      
-            const startNode = new node(node2, node3, "Start node");
-            
-            function testNode(){
-                document.getElementById(endNode.nodeID).style.fill = "red";
-            }
-            
-            function getTraversedNodes(){
-                //reset traversedNodes to default state before next run 
-                //done to make sure traversedNodes does not get filled up with previous runs
-                traversedNodes = ["Start node"];
-
-                //start traversal of nodes from start node (node1)
-                let currentNode = startNode;
+                else if (currentDFA == "DFA2"){
+                    traversedNodes = ["startNodeNum"];
+                    currentNode = startNodeNum;
+                }
+                               
 
                 //get user inputted string
                 let inputString = document.getElementById("input string").value;
@@ -75,9 +52,8 @@
                     //check if current letter is a or b 
                     //!!! unimplemented => needs check if user inputted string only consists of a and b)
 
-                    if (c == "a"){
+                    if (c == "a"  ||  c == "1"){
                         //pushes the next node to the array containing all traversed nodes
-                        //array with all traversed ondes will be used to show all the notes that string has reached
                         //simulates that the string has passed this particular node's check and thus it's fine to go to next one
                         traversedNodes.push(currentNode.a.nodeID);
 
@@ -85,71 +61,261 @@
                         //assumes that all nodes are connected to another node by a or b (which is true because DFA)
                         currentNode = currentNode.a;        
                     }
-                    else if (c == "b"){
+                    else if (c == "b" || c == "0" ){
                         //all lines are identical to above if statements using 'a', just replaced with 'b'
                         traversedNodes.push(currentNode.b.nodeID);
                         currentNode = currentNode.b;                        
                     }
                 }
+
+                if (currentNode == endNodeNum){
+                    alert("String is valid");
+                }
+                else {
+                    alert("String is invalid");
+                }
             };
 
+            //code taken from stackoverflow; basically just waits for specified amount of milliseconds
+            // Returns a Promise that resolves after "ms" Milliseconds
+            const timer = ms => new Promise(res => setTimeout(res, ms))
+       
+            //function that changes color of nodes to show what path the string takes through the DFA
+                
+            async function changeColor(){   //"async" keyword apparently required for "await" to work
+                //let selectedDFA = document.getElementById("DFA2");
+                getTraversedNodes();
+                for (let node of allNodes){
+                    document.getElementById(node).style.fill = "white";
+                }       
+
+                for (let node of traversedNodes){
+                    document.getElementById(node).style.fill = "red";
+                    await timer(200); 
+                    document.getElementById(node).style.fill = "green";
+                    await timer(500);                    
+                } 
+            }
+
+            //constructor class for nodes in DFA
+                //property a means what node the strings goes to next if the current character is an 'a'
+                //property b means what node the strings goes to next if the current character is an 'b'
+
+                //property nodeID means what HTML element the node corresponds to ->
+                //  magkaiba ang nodeID sa node na object mismo, nirerepresent ng nodeID ay ung 
+                //  mismong circle sa html, ang node object ay ung data structure 
+            class node{
+                constructor(a, b, nodeID){
+                    this.a = a;
+                    this.b = b;
+                    this.nodeID = (nodeID);
+                }
+            }
+
+            //creation of all node objects in the DFA
+            const endNodeNum = new node(null, null, "endNodeNum");
+                endNodeNum.a = endNodeNum;
+                endNodeNum.b = endNodeNum;
+            const node8Num = new node(endNodeNum, null, "node8Num");
+            const node7Num = new node(endNodeNum, node8Num, "node7Num");
+            const node6Num = new node(node7Num, node8Num, "node6Num");
+            const node5Num = new node(node6Num, null, "node5Num");
+                node5Num.b = node5Num;
+                node8Num.b = node5Num;
+            const node4Num = new node(node5Num, node5Num, "node4Num");
+            const node3Num = new node(null, node4Num, "node3Num");
+            const node2Num = new node(node4Num, node3Num, "node2Num");      
+                node3Num.a = node2Num;      
+            const startNodeNum = new node(node2Num, node3Num, "startNodeNum");
 
 
+            function setCSS(){ //sets CSS when loading the website
+                document.getElementById("DFA2").style.display = "none";
+                //document.getElementsByClassName("labels").style.fontFamily = "Is-serif";
+            }
+
+            function openDFA1(){ //changes current DFA being simulated to DFA number 1
+                //hides DFA2 and shows DFA1
+                document.getElementById("DFA2").style.display = "none";
+                document.getElementById("DFA1").style.display = "block";
+            }
+
+            function openDFA2(){ //changes current DFA being simulated to DFA number 1
+                 //hides DFA1 and shows DFA2
+                document.getElementById("DFA1").style.display = "none";
+                document.getElementById("DFA2").style.display = "block";
+                currentDFA = "DFA2"
+            }
+            
         </script>
-    </head>
-    <body>
 
-        <svg width="900px" height="450px" viewBox="0 0 447 184" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g id="Frame 3">
-                <circle id="End node" cx="412.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node7" cx="340.5" cy="35.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node8" cx="340.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node6" cx="268.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node5" cx="196.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node4" cx="124.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node3" cx="79.5" cy="148.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="node2" cx="79.5" cy="58.5" r="21" stroke="black" stroke-width="3"/>
-                <circle id="Start node" cx="34.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
-                <path id="Arrow 7" d="M62.0623 70.9377L50.9087 73.9263L59.0737 82.0913L62.0623 70.9377ZM46.6449 87.7694L56.4054 78.0088L54.9912 76.5946L45.2306 86.3551L46.6449 87.7694Z" fill="black"/>
-                <path id="Arrow 16" d="M324.055 50.0077L312.901 52.9963L321.066 61.1613L324.055 50.0077ZM284.653 90.8239L318.398 57.0788L316.983 55.6646L283.238 89.4097L284.653 90.8239Z" fill="black"/>
-                <path id="Arrow 17" d="M396.109 90.1091L393.121 78.9555L384.956 87.1205L396.109 90.1091ZM355.293 50.7071L389.038 84.4522L390.452 83.038L356.707 49.2929L355.293 50.7071Z" fill="black"/>
-                <path id="Arrow 8" d="M107.125 116L95.971 118.989L104.136 127.154L107.125 116ZM91.7071 132.832L101.468 123.071L100.053 121.657L90.2929 131.417L91.7071 132.832Z" fill="black"/>
-                <path id="Arrow 9" d="M68.1245 129.125L65.1359 117.971L56.971 126.136L68.1245 129.125ZM51.2929 113.707L61.0534 123.468L62.4677 122.053L52.7071 112.293L51.2929 113.707Z" fill="black"/>
-                <path id="Arrow 10" d="M113.125 85.1245L110.136 73.971L101.971 82.1359L113.125 85.1245ZM96.2929 69.7071L106.053 79.4677L107.468 78.0534L97.7071 68.2929L96.2929 69.7071Z" fill="black"/>
-                <path id="Arrow 20" d="M74 127L75.2719 115.523L64.6968 120.16L74 127ZM73.1101 78.5439C68.8189 86.9165 66.5755 93.6894 66.0832 100.084C65.5898 106.492 66.8614 112.431 69.454 119.12L71.3188 118.397C68.7944 111.884 67.614 106.254 68.0773 100.237C68.5415 94.2078 70.6634 87.7025 74.8899 79.4561L73.1101 78.5439Z" fill="black"/>
-                <path id="Arrow 21" d="M85 79L82.6447 90.3042L93.6121 86.6919L85 79ZM85.9086 127.418C89.2847 120.074 91.14 113.849 91.5711 107.525C92.0023 101.202 91.0047 94.8519 88.7753 87.2672L86.8565 87.8312C89.0465 95.2817 89.9853 101.382 89.5758 107.389C89.1663 113.394 87.404 119.377 84.0914 126.582L85.9086 127.418Z" fill="black"/>
-                <path id="Arrow 11" d="M174 104L164 98.2265V109.774L174 104ZM146 105H165V103H146V105Z" fill="black"/>
-                <path id="Arrow 13" d="M318 104L308 98.2265V109.774L318 104ZM290 105H309V103H290V105Z" fill="black"/>
-                <path id="Arrow 15" d="M340 82L345.774 72H334.226L340 82ZM339 58V73H341V58H339Z" fill="black"/>
-                <path id="Arrow 14" d="M390 104L380 98.2265V109.774L390 104ZM362 105H381V103H362V105Z" fill="black"/>
-                <path id="Arrow 12" d="M246 104L236 98.2265V109.774L246 104ZM218 105H237V103H218V105Z" fill="black"/>
-                <path id="Arrow 18" d="M211.5 119.5L215.987 130.14L222.958 120.934L211.5 119.5ZM218.259 125.843C228.155 130.396 246.945 135.689 267.924 136.901C288.9 138.112 312.209 135.252 331.035 123.345L329.965 121.655C311.632 133.251 288.8 136.103 268.04 134.904C247.282 133.705 228.74 128.464 219.095 124.026L218.259 125.843Z" fill="black"/>
-                <path id="Arrow 19" d="M211 87.4999L221.712 83.1887L212.622 76.0675L211 87.4999ZM183.301 85.9016C176.555 76.8691 176.587 70.5678 179.459 66.5021C182.432 62.2933 188.756 59.9733 195.672 59.6812C202.561 59.3903 209.651 61.1342 213.934 64.6048C216.056 66.3238 217.456 68.4351 217.869 70.9161C218.283 73.4006 217.731 76.3944 215.683 79.9167L217.412 80.9219C219.628 77.1108 220.352 73.6465 219.842 70.5874C219.332 67.5248 217.608 65.0071 215.193 63.0508C210.404 59.1709 202.772 57.3796 195.587 57.683C188.429 57.9853 181.329 60.3892 177.826 65.3482C174.221 70.4504 174.725 77.7608 181.699 87.0984L183.301 85.9016Z" fill="black"/>
-                <path id="Arrow 22" d="M397.961 119.297L387.242 123.593L396.322 130.727L397.961 119.297ZM425.657 120.936C432.39 129.978 432.349 136.279 429.471 140.341C426.492 144.545 420.164 146.856 413.249 147.138C406.359 147.419 399.272 145.665 394.993 142.188C392.874 140.466 391.477 138.353 391.068 135.871C390.657 133.386 391.214 130.393 393.267 126.874L391.539 125.866C389.318 129.674 388.589 133.137 389.094 136.197C389.6 139.26 391.32 141.78 393.732 143.74C398.515 147.627 406.145 149.429 413.33 149.136C420.489 148.844 427.593 146.451 431.103 141.497C434.714 136.4 434.221 129.089 427.261 119.741L425.657 120.936Z" fill="black"/>
-                <path id="1" d="M46.9716 70.2727V79H45.9148V71.3807H45.8636L43.733 72.7955V71.7216L45.9148 70.2727H46.9716Z" fill="black"/>
-                <path id="0" d="M62.75 104.119C62.108 104.119 61.5611 103.945 61.1094 103.595C60.6577 103.243 60.3125 102.733 60.0739 102.065C59.8352 101.395 59.7159 100.585 59.7159 99.6364C59.7159 98.6932 59.8352 97.8878 60.0739 97.2202C60.3153 96.5497 60.6619 96.0384 61.1136 95.6861C61.5682 95.331 62.1136 95.1534 62.75 95.1534C63.3864 95.1534 63.9304 95.331 64.3821 95.6861C64.8366 96.0384 65.1832 96.5497 65.4219 97.2202C65.6634 97.8878 65.7841 98.6932 65.7841 99.6364C65.7841 100.585 65.6648 101.395 65.4261 102.065C65.1875 102.733 64.8423 103.243 64.3906 103.595C63.9389 103.945 63.392 104.119 62.75 104.119ZM62.75 103.182C63.3864 103.182 63.8807 102.875 64.233 102.261C64.5852 101.648 64.7614 100.773 64.7614 99.6364C64.7614 98.8807 64.6804 98.2372 64.5185 97.706C64.3594 97.1747 64.1293 96.7699 63.8281 96.4915C63.5298 96.2131 63.1705 96.0739 62.75 96.0739C62.1193 96.0739 61.6264 96.3849 61.2713 97.0071C60.9162 97.6264 60.7386 98.5028 60.7386 99.6364C60.7386 100.392 60.8182 101.034 60.9773 101.562C61.1364 102.091 61.3651 102.493 61.6634 102.768C61.9645 103.044 62.3267 103.182 62.75 103.182Z" fill="black"/>
-                <path id="1_2" d="M116.972 67.2727V76H115.915V68.3807H115.864L113.733 69.7955V68.7216L115.915 67.2727H116.972Z" fill="black"/>
-                <path id="1_3" d="M232.972 87.2727V96H231.915V88.3807H231.864L229.733 89.7955V88.7216L231.915 87.2727H232.972Z" fill="black"/>
-                <path id="1_4" d="M294.972 62.2727V71H293.915V63.3807H293.864L291.733 64.7955V63.7216L293.915 62.2727H294.972Z" fill="black"/>
-                <path id="1_5" d="M371.972 108.273V117H370.915V109.381H370.864L368.733 110.795V109.722L370.915 108.273H371.972Z" fill="black"/>
-                <path id="1_6" d="M393.972 61.2727V70H392.915V62.3807H392.864L390.733 63.7955V62.7216L392.915 61.2727H393.972Z" fill="black"/>
-                <path id="1, 0" d="M153.972 87.2727V96H152.915V88.3807H152.864L150.733 89.7955V88.7216L152.915 87.2727H153.972ZM157.483 94.8068L157.415 95.267C157.366 95.5909 157.293 95.9375 157.193 96.3068C157.097 96.6761 156.996 97.0241 156.891 97.3509C156.786 97.6776 156.699 97.9375 156.631 98.1307H155.864C155.901 97.9489 155.949 97.7088 156.009 97.4105C156.068 97.1122 156.128 96.7784 156.188 96.4091C156.25 96.0426 156.301 95.6676 156.341 95.2841L156.392 94.8068H157.483ZM165.551 96.1193C164.909 96.1193 164.362 95.9446 163.91 95.5952C163.458 95.2429 163.113 94.733 162.875 94.0653C162.636 93.3949 162.517 92.5852 162.517 91.6364C162.517 90.6932 162.636 89.8878 162.875 89.2202C163.116 88.5497 163.463 88.0384 163.914 87.6861C164.369 87.331 164.914 87.1534 165.551 87.1534C166.187 87.1534 166.731 87.331 167.183 87.6861C167.637 88.0384 167.984 88.5497 168.223 89.2202C168.464 89.8878 168.585 90.6932 168.585 91.6364C168.585 92.5852 168.466 93.3949 168.227 94.0653C167.988 94.733 167.643 95.2429 167.191 95.5952C166.74 95.9446 166.193 96.1193 165.551 96.1193ZM165.551 95.1818C166.187 95.1818 166.681 94.875 167.034 94.2614C167.386 93.6477 167.562 92.7727 167.562 91.6364C167.562 90.8807 167.481 90.2372 167.319 89.706C167.16 89.1747 166.93 88.7699 166.629 88.4915C166.331 88.2131 165.971 88.0739 165.551 88.0739C164.92 88.0739 164.427 88.3849 164.072 89.0071C163.717 89.6264 163.539 90.5028 163.539 91.6364C163.539 92.392 163.619 93.0341 163.778 93.5625C163.937 94.0909 164.166 94.4929 164.464 94.7685C164.765 95.044 165.127 95.1818 165.551 95.1818Z" fill="black"/>
-                <path id="1, 0_2" d="M404.972 152.273V161H403.915V153.381H403.864L401.733 154.795V153.722L403.915 152.273H404.972ZM408.483 159.807L408.415 160.267C408.366 160.591 408.293 160.938 408.193 161.307C408.097 161.676 407.996 162.024 407.891 162.351C407.786 162.678 407.699 162.938 407.631 163.131H406.864C406.901 162.949 406.949 162.709 407.009 162.411C407.068 162.112 407.128 161.778 407.188 161.409C407.25 161.043 407.301 160.668 407.341 160.284L407.392 159.807H408.483ZM416.551 161.119C415.909 161.119 415.362 160.945 414.91 160.595C414.458 160.243 414.113 159.733 413.875 159.065C413.636 158.395 413.517 157.585 413.517 156.636C413.517 155.693 413.636 154.888 413.875 154.22C414.116 153.55 414.463 153.038 414.914 152.686C415.369 152.331 415.914 152.153 416.551 152.153C417.187 152.153 417.731 152.331 418.183 152.686C418.637 153.038 418.984 153.55 419.223 154.22C419.464 154.888 419.585 155.693 419.585 156.636C419.585 157.585 419.466 158.395 419.227 159.065C418.988 159.733 418.643 160.243 418.191 160.595C417.74 160.945 417.193 161.119 416.551 161.119ZM416.551 160.182C417.187 160.182 417.681 159.875 418.034 159.261C418.386 158.648 418.562 157.773 418.562 156.636C418.562 155.881 418.481 155.237 418.319 154.706C418.16 154.175 417.93 153.77 417.629 153.491C417.331 153.213 416.971 153.074 416.551 153.074C415.92 153.074 415.427 153.385 415.072 154.007C414.717 154.626 414.539 155.503 414.539 156.636C414.539 157.392 414.619 158.034 414.778 158.562C414.937 159.091 415.166 159.493 415.464 159.768C415.765 160.044 416.127 160.182 416.551 160.182Z" fill="black"/>
-                <path id="0_2" d="M52.75 136.119C52.108 136.119 51.5611 135.945 51.1094 135.595C50.6577 135.243 50.3125 134.733 50.0739 134.065C49.8352 133.395 49.7159 132.585 49.7159 131.636C49.7159 130.693 49.8352 129.888 50.0739 129.22C50.3153 128.55 50.6619 128.038 51.1136 127.686C51.5682 127.331 52.1136 127.153 52.75 127.153C53.3864 127.153 53.9304 127.331 54.3821 127.686C54.8366 128.038 55.1832 128.55 55.4219 129.22C55.6634 129.888 55.7841 130.693 55.7841 131.636C55.7841 132.585 55.6648 133.395 55.4261 134.065C55.1875 134.733 54.8423 135.243 54.3906 135.595C53.9389 135.945 53.392 136.119 52.75 136.119ZM52.75 135.182C53.3864 135.182 53.8807 134.875 54.233 134.261C54.5852 133.648 54.7614 132.773 54.7614 131.636C54.7614 130.881 54.6804 130.237 54.5185 129.706C54.3594 129.175 54.1293 128.77 53.8281 128.491C53.5298 128.213 53.1705 128.074 52.75 128.074C52.1193 128.074 51.6264 128.385 51.2713 129.007C50.9162 129.626 50.7386 130.503 50.7386 131.636C50.7386 132.392 50.8182 133.034 50.9773 133.562C51.1364 134.091 51.3651 134.493 51.6634 134.768C51.9645 135.044 52.3267 135.182 52.75 135.182Z" fill="black"/>
-                <path id="0_3" d="M195.75 53.1193C195.108 53.1193 194.561 52.9446 194.109 52.5952C193.658 52.2429 193.313 51.733 193.074 51.0653C192.835 50.3949 192.716 49.5852 192.716 48.6364C192.716 47.6932 192.835 46.8878 193.074 46.2202C193.315 45.5497 193.662 45.0384 194.114 44.6861C194.568 44.331 195.114 44.1534 195.75 44.1534C196.386 44.1534 196.93 44.331 197.382 44.6861C197.837 45.0384 198.183 45.5497 198.422 46.2202C198.663 46.8878 198.784 47.6932 198.784 48.6364C198.784 49.5852 198.665 50.3949 198.426 51.0653C198.188 51.733 197.842 52.2429 197.391 52.5952C196.939 52.9446 196.392 53.1193 195.75 53.1193ZM195.75 52.1818C196.386 52.1818 196.881 51.875 197.233 51.2614C197.585 50.6477 197.761 49.7727 197.761 48.6364C197.761 47.8807 197.68 47.2372 197.518 46.706C197.359 46.1747 197.129 45.7699 196.828 45.4915C196.53 45.2131 196.17 45.0739 195.75 45.0739C195.119 45.0739 194.626 45.3849 194.271 46.0071C193.916 46.6264 193.739 47.5028 193.739 48.6364C193.739 49.392 193.818 50.0341 193.977 50.5625C194.136 51.0909 194.365 51.4929 194.663 51.7685C194.964 52.044 195.327 52.1818 195.75 52.1818Z" fill="black"/>
-                <path id="0_4" d="M270.75 148.119C270.108 148.119 269.561 147.945 269.109 147.595C268.658 147.243 268.313 146.733 268.074 146.065C267.835 145.395 267.716 144.585 267.716 143.636C267.716 142.693 267.835 141.888 268.074 141.22C268.315 140.55 268.662 140.038 269.114 139.686C269.568 139.331 270.114 139.153 270.75 139.153C271.386 139.153 271.93 139.331 272.382 139.686C272.837 140.038 273.183 140.55 273.422 141.22C273.663 141.888 273.784 142.693 273.784 143.636C273.784 144.585 273.665 145.395 273.426 146.065C273.188 146.733 272.842 147.243 272.391 147.595C271.939 147.945 271.392 148.119 270.75 148.119ZM270.75 147.182C271.386 147.182 271.881 146.875 272.233 146.261C272.585 145.648 272.761 144.773 272.761 143.636C272.761 142.881 272.68 142.237 272.518 141.706C272.359 141.175 272.129 140.77 271.828 140.491C271.53 140.213 271.17 140.074 270.75 140.074C270.119 140.074 269.626 140.385 269.271 141.007C268.916 141.626 268.739 142.503 268.739 143.636C268.739 144.392 268.818 145.034 268.977 145.562C269.136 146.091 269.365 146.493 269.663 146.768C269.964 147.044 270.327 147.182 270.75 147.182Z" fill="black"/>
-                <path id="0_5" d="M331.75 71.1193C331.108 71.1193 330.561 70.9446 330.109 70.5952C329.658 70.2429 329.313 69.733 329.074 69.0653C328.835 68.3949 328.716 67.5852 328.716 66.6364C328.716 65.6932 328.835 64.8878 329.074 64.2202C329.315 63.5497 329.662 63.0384 330.114 62.6861C330.568 62.331 331.114 62.1534 331.75 62.1534C332.386 62.1534 332.93 62.331 333.382 62.6861C333.837 63.0384 334.183 63.5497 334.422 64.2202C334.663 64.8878 334.784 65.6932 334.784 66.6364C334.784 67.5852 334.665 68.3949 334.426 69.0653C334.188 69.733 333.842 70.2429 333.391 70.5952C332.939 70.9446 332.392 71.1193 331.75 71.1193ZM331.75 70.1818C332.386 70.1818 332.881 69.875 333.233 69.2614C333.585 68.6477 333.761 67.7727 333.761 66.6364C333.761 65.8807 333.68 65.2372 333.518 64.706C333.359 64.1747 333.129 63.7699 332.828 63.4915C332.53 63.2131 332.17 63.0739 331.75 63.0739C331.119 63.0739 330.626 63.3849 330.271 64.0071C329.916 64.6264 329.739 65.5028 329.739 66.6364C329.739 67.392 329.818 68.0341 329.977 68.5625C330.136 69.0909 330.365 69.4929 330.663 69.7685C330.964 70.044 331.327 70.1818 331.75 70.1818Z" fill="black"/>
-                <path id="0_6" d="M303.75 94.1193C303.108 94.1193 302.561 93.9446 302.109 93.5952C301.658 93.2429 301.313 92.733 301.074 92.0653C300.835 91.3949 300.716 90.5852 300.716 89.6364C300.716 88.6932 300.835 87.8878 301.074 87.2202C301.315 86.5497 301.662 86.0384 302.114 85.6861C302.568 85.331 303.114 85.1534 303.75 85.1534C304.386 85.1534 304.93 85.331 305.382 85.6861C305.837 86.0384 306.183 86.5497 306.422 87.2202C306.663 87.8878 306.784 88.6932 306.784 89.6364C306.784 90.5852 306.665 91.3949 306.426 92.0653C306.188 92.733 305.842 93.2429 305.391 93.5952C304.939 93.9446 304.392 94.1193 303.75 94.1193ZM303.75 93.1818C304.386 93.1818 304.881 92.875 305.233 92.2614C305.585 91.6477 305.761 90.7727 305.761 89.6364C305.761 88.8807 305.68 88.2372 305.518 87.706C305.359 87.1747 305.129 86.7699 304.828 86.4915C304.53 86.2131 304.17 86.0739 303.75 86.0739C303.119 86.0739 302.626 86.3849 302.271 87.0071C301.916 87.6264 301.739 88.5028 301.739 89.6364C301.739 90.392 301.818 91.0341 301.977 91.5625C302.136 92.0909 302.365 92.4929 302.663 92.7685C302.964 93.044 303.327 93.1818 303.75 93.1818Z" fill="black"/>
-                <path id="1_7" d="M96.9716 95.2727V104H95.9148V96.3807H95.8636L93.733 97.7955V96.7216L95.9148 95.2727H96.9716Z" fill="black"/>
-                <path id="0_7" d="M108.75 136.119C108.108 136.119 107.561 135.945 107.109 135.595C106.658 135.243 106.313 134.733 106.074 134.065C105.835 133.395 105.716 132.585 105.716 131.636C105.716 130.693 105.835 129.888 106.074 129.22C106.315 128.55 106.662 128.038 107.114 127.686C107.568 127.331 108.114 127.153 108.75 127.153C109.386 127.153 109.93 127.331 110.382 127.686C110.837 128.038 111.183 128.55 111.422 129.22C111.663 129.888 111.784 130.693 111.784 131.636C111.784 132.585 111.665 133.395 111.426 134.065C111.188 134.733 110.842 135.243 110.391 135.595C109.939 135.945 109.392 136.119 108.75 136.119ZM108.75 135.182C109.386 135.182 109.881 134.875 110.233 134.261C110.585 133.648 110.761 132.773 110.761 131.636C110.761 130.881 110.68 130.237 110.518 129.706C110.359 129.175 110.129 128.77 109.828 128.491C109.53 128.213 109.17 128.074 108.75 128.074C108.119 128.074 107.626 128.385 107.271 129.007C106.916 129.626 106.739 130.503 106.739 131.636C106.739 132.392 106.818 133.034 106.977 133.562C107.136 134.091 107.365 134.493 107.663 134.768C107.964 135.044 108.327 135.182 108.75 135.182Z" fill="black"/>
-            </g>
-        </svg>
+    </head>
+    <body onload=setCSS()>
+        <div style="border: 10px solid black;  height: 100px;">
+            <button type="button" class = "button" style="width: 50%; height: 100%; float: left;" onclick=openDFA1()> Numba 1</button>
+            <button type="button" class = "button" style="width: 50%; height: 100%; float: right;" onclick=openDFA2()> Numba 2</button>
+        </div><br>
+        
+        <div id="DFA1" style = "border: 10px solid black; text-align: center; height: 1500px;">
+            <svg height="100%" viewBox="0 0 627 474" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="DFA1">
+                    <g id="Labels" class ="labels">
+                        <text id="T" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="226" y="193.864">T</tspan></text>
+                        <text id="N5" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="149" y="265.864">N5</tspan></text>
+                        <text id="N6" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="149" y="338.864">N6</tspan></text>
+                        <text id="N7" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="76" y="411.864">N7</tspan></text>
+                        <text id="N8" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="149" y="411.864">N8</tspan></text>
+                        <text id="N9" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="222" y="411.864">N9</tspan></text>
+                        <text id="N10" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="345" y="189.864">N10</tspan></text>
+                        <text id="N11" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="419" y="189.864">N11</tspan></text>
+                        <text id="N12" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="477" y="154.864">N12</tspan></text>
+                        <text id="N13" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="477" y="225.864">N13</tspan></text>
+                        <text id="N3" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="149" y="119.864">N3</tspan></text>
+                        <text id="N4" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="149" y="46.8636">N4</tspan></text>
+                        <text id="-" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="78" y="197.227">-</tspan></text>
+                        <text id="+" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="158.227">+</tspan></text>
+                        <text id="+_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="230.227">+</tspan></text>
+                        <text id="a" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="114" y="181.864">a</tspan></text>
+                        <text id="a_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="143" y="224.864">a</tspan></text>
+                        <text id="a_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="194" y="235.864">a</tspan></text>
+                        <text id="a_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="114" y="399.864">a</tspan></text>
+                        <text id="a_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="262" y="349.864">a</tspan></text>
+                        <text id="a_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="502" y="189.864">a</tspan></text>
+                        <text id="a_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="532" y="171.864">a</tspan></text>
+                        <text id="a_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="557" y="276.864">a</tspan></text>
+                        <text id="a_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="301" y="399.864">a</tspan></text>
+                        <text id="a_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="143" y="83.8636">a</tspan></text>
+                        <text id="a_11" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="208" y="103.864">a</tspan></text>
+                        <text id="a, b" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="254" y="170.864">a, b</tspan></text>
+                        <text id="a, b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="383" y="170.864">a, b</tspan></text>
+                        <text id="b" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="143" y="158.864">b</tspan></text>
+                        <text id="b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="193" y="149.864">b</tspan></text>
+                        <text id="b_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="265" y="38.8636">b</tspan></text>
+                        <text id="b_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="465" y="189.864">b</tspan></text>
+                        <text id="b_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="532" y="207.864">b</tspan></text>
+                        <text id="b_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="557" y="100.864">b</tspan></text>
+                        <text id="b_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="143" y="299.864">b</tspan></text>
+                        <text id="b_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="208" y="280.864">b</tspan></text>
+                        <text id="b_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="187" y="399.864">b</tspan></text>
+                        <text id="b_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="154" y="445.864">b</tspan></text>
+                        <text id="N2" fill="black" xml:space="preserve" style="white-space: pre" font-family="verdana" font-size="12" letter-spacing="0em"><tspan x="150" y="193.864">N2</tspan></text>
+                    </g>
+            
+                    <g id="Arrows">
+                        <path id="Arrow 11" d="M157 138L151.226 148H162.774L157 138ZM158 166V147H156V166H158Z" fill="black"/>
+                        <path id="Arrow 23" d="M135 189L125 183.226V194.774L135 189ZM107 190H126V188H107V190Z" fill="black"/>
+                        <path id="Arrow 25" d="M135 408L125 402.226V413.774L135 408ZM107 409H126V407H107V409Z" fill="black"/>
+                        <path id="Arrow 21" d="M157 239L162.774 229H151.226L157 239ZM156 211V230H158V211H156Z" fill="black"/>
+                        <path id="Arrow 32" d="M408 186L398 180.226V191.774L408 186ZM380 187H399V185H380V187Z" fill="black"/>
+                        <path id="Arrow 35" d="M464.799 151L453.645 153.989L461.81 162.154L464.799 151ZM445.707 171.506L459.142 158.071L457.728 156.657L444.293 170.092L445.707 171.506Z" fill="black"/>
+                        <path id="Arrow 37" d="M504.824 207.528L515.977 204.539L507.812 196.374L504.824 207.528ZM511.895 201.871L546.884 166.882L545.469 165.468L510.48 200.457L511.895 201.871Z" fill="black"/>
+                        <path id="Arrow 38" d="M505 164L507.989 175.154L516.154 166.989L505 164ZM510.657 171.071L545.646 206.06L547.06 204.646L512.071 169.657L510.657 171.071Z" fill="black"/>
+                        <path id="Arrow 36" d="M464.799 221.799L461.81 210.645L453.645 218.81L464.799 221.799ZM444.293 202.707L457.728 216.142L459.142 214.728L445.707 201.293L444.293 202.707Z" fill="black"/>
+                        <path id="Arrow 33" d="M538 151L528 145.226V156.774L538 151ZM510 152H529V150H510V152Z" fill="black"/>
+                        <path id="Arrow 22" d="M157 312L162.774 302H151.226L157 312ZM156 284V303H158V284H156Z" fill="black"/>
+                        <path id="Arrow 28" d="M230 211L220.857 218.052L231.536 222.444L230 211ZM179.925 335.38L227.501 219.704L225.652 218.943L178.075 334.62L179.925 335.38Z" fill="black"/>
+                        <path id="Arrow 31" d="M208 189L198.942 196.162L209.674 200.425L208 189ZM179.929 262.369L205.607 197.733L203.748 196.995L178.071 261.631L179.929 262.369Z" fill="black"/>
+                        <path id="Arrow 29" d="M230 166L231.503 154.551L220.837 158.974L230 166ZM178.076 43.383L225.629 158.069L227.477 157.303L179.924 42.617L178.076 43.383Z" fill="black"/>
+                        <path id="Arrow 30" d="M208 189L209.674 177.575L198.942 181.838L208 189ZM178.071 116.369L203.748 181.005L205.607 180.267L179.929 115.631L178.071 116.369Z" fill="black"/>
+                        <path id="Arrow 24" d="M84 385L89.7735 375H78.2265L84 385ZM83 211L83 376H85L85 211H83Z" fill="black"/>
+                        <path id="Arrow 26" d="M208 408L198 402.226V413.774L208 408ZM180 409H199V407H180V409Z" fill="black"/>
+                        <path id="Arrow 34" d="M538 222L528 216.226V227.774L538 222ZM510 223H529V221H510V223Z" fill="black"/>
+                        <path id="Arrow 20" d="M157 65L151.226 75H162.774L157 65ZM158 93V74H156V93H158Z" fill="black"/>
+                        <path id="Rectangle 1" d="M136.5 116L126.5 110.226V121.774L136.5 116ZM59 117H127.5V115H59V117ZM46 394V130H44V394H46ZM64 407H59V409H64V407ZM44 394C44 402.284 50.7157 409 59 409V407C51.8203 407 46 401.18 46 394H44ZM59 115C50.7157 115 44 121.716 44 130H46C46 122.82 51.8203 117 59 117V115Z" fill="black"/>
+                        <path id="Rectangle 2" d="M84 430L78.2265 440H89.7735L84 430ZM85 440V439H83V440H85ZM216 453H98V455H216V453ZM229 430V440H231V430H229ZM216 455C224.284 455 231 448.284 231 440H229C229 447.18 223.18 453 216 453V455ZM83 440C83 448.284 89.7157 455 98 455V453C90.8203 453 85 447.18 85 440H83Z" fill="black"/>
+                        <path id="Vector 1" d="M335 186L325 180.226V191.774L335 186ZM180 336H296.271V334H180V336ZM316.271 187H326V185H316.271V187ZM307.271 325V253.727H305.271V325H307.271ZM307.271 253.727V196H305.271V253.727H307.271ZM316.271 185C310.196 185 305.271 189.925 305.271 196H307.271C307.271 191.029 311.3 187 316.271 187V185ZM296.271 336C302.346 336 307.271 331.075 307.271 325H305.271C305.271 329.971 301.242 334 296.271 334V336Z" fill="black"/>
+                        <path id="Vector 2" d="M357 164L362.773 154H351.226L357 164ZM179 46H347V44H179V46ZM356 55V155H358V55H356ZM347 46C351.971 46 356 50.0294 356 55H358C358 48.9249 353.075 44 347 44V46Z" fill="black"/>
+                        <path id="Vector 3" d="M357 208L362.774 218H351.226L357 208ZM253 407H347V409H253V407ZM356 398V217H358V398H356ZM347 407C351.971 407 356 402.971 356 398H358C358 404.075 353.075 409 347 409V407Z" fill="black"/>
+                        <path id="Ellipse 1" d="M253.06 193.391L255.496 204.678L264.053 196.926L253.06 193.391ZM277.11 188.613L276.11 188.612L276.11 188.612L277.11 188.613ZM274.274 180.682L273.501 181.316L273.501 181.316L274.274 180.682ZM258.243 200.514C260.998 201.987 264.177 202.46 267.241 201.851L266.851 199.889C264.241 200.408 261.533 200.006 259.187 198.751L258.243 200.514ZM267.241 201.851C270.304 201.242 273.062 199.59 275.044 197.177L273.498 195.907C271.81 197.964 269.46 199.371 266.851 199.889L267.241 201.851ZM275.044 197.177C277.026 194.763 278.109 191.736 278.11 188.613L276.11 188.612C276.109 191.273 275.186 193.851 273.498 195.907L275.044 197.177ZM278.11 188.613C278.111 185.49 277.028 182.463 275.047 180.048L273.501 181.316C275.188 183.373 276.11 185.952 276.11 188.612L278.11 188.613ZM275.047 180.048C273.067 177.633 270.31 175.98 267.246 175.37L266.856 177.331C269.465 177.851 271.814 179.259 273.501 181.316L275.047 180.048ZM267.246 175.37C264.183 174.76 261.003 175.231 258.249 176.703L259.191 178.467C261.538 177.213 264.247 176.812 266.856 177.331L267.246 175.37ZM258.249 176.703C255.494 178.174 253.334 180.556 252.139 183.441L253.986 184.207C255.005 181.749 256.844 179.72 259.191 178.467L258.249 176.703Z" fill="black"/>
+                        <path id="Ellipse 2" d="M566.451 128.764L577.482 125.351L569.01 117.505L566.451 128.764ZM559.586 105.225L559.674 106.222L559.674 106.222L559.586 105.225ZM551.935 108.744L552.634 109.459L552.634 109.459L551.935 108.744ZM573.094 122.978C574.32 120.105 574.512 116.897 573.638 113.898L571.718 114.458C572.463 117.012 572.299 119.746 571.254 122.193L573.094 122.978ZM573.638 113.898C572.763 110.9 570.876 108.297 568.298 106.534L567.169 108.185C569.365 109.687 570.973 111.904 571.718 114.458L573.638 113.898ZM568.298 106.534C565.72 104.771 562.611 103.957 559.499 104.229L559.674 106.222C562.324 105.989 564.973 106.683 567.169 108.185L568.298 106.534ZM559.499 104.229C556.388 104.502 553.467 105.845 551.235 108.029L552.634 109.459C554.535 107.598 557.023 106.454 559.674 106.222L559.499 104.229ZM551.235 108.029C549.003 110.214 547.597 113.105 547.258 116.21L549.246 116.427C549.535 113.782 550.733 111.32 552.634 109.459L551.235 108.029ZM547.258 116.21C546.918 119.315 547.666 122.441 549.373 125.057L551.048 123.963C549.593 121.735 548.957 119.072 549.246 116.427L547.258 116.21ZM549.373 125.057C551.08 127.672 553.641 129.615 556.62 130.553L557.221 128.646C554.684 127.846 552.502 126.191 551.048 123.963L549.373 125.057Z" fill="black"/>
+                        <path id="Ellipse 3" d="M554.904 243.591L543.873 247.005L552.345 254.851L554.904 243.591ZM561.769 267.13L561.682 266.134L561.682 266.134L561.769 267.13ZM569.421 263.611L568.721 262.896L568.721 262.896L569.421 263.611ZM548.262 249.377C547.035 252.25 546.843 255.459 547.718 258.457L549.638 257.897C548.893 255.343 549.056 252.61 550.101 250.163L548.262 249.377ZM547.718 258.457C548.592 261.456 550.479 264.058 553.057 265.821L554.186 264.17C551.99 262.668 550.382 260.451 549.638 257.897L547.718 258.457ZM553.057 265.821C555.635 267.584 558.745 268.399 561.856 268.126L561.682 266.134C559.031 266.366 556.382 265.672 554.186 264.17L553.057 265.821ZM561.856 268.126C564.968 267.853 567.888 266.51 570.12 264.326L568.721 262.896C566.82 264.757 564.332 265.902 561.682 266.134L561.856 268.126ZM570.12 264.326C572.352 262.141 573.758 259.25 574.098 256.145L572.109 255.928C571.82 258.573 570.623 261.036 568.721 262.896L570.12 264.326ZM574.098 256.145C574.437 253.041 573.69 249.914 571.983 247.299L570.308 248.392C571.762 250.62 572.399 253.283 572.109 255.928L574.098 256.145ZM571.983 247.299C570.275 244.683 567.714 242.741 564.735 241.802L564.134 243.709C566.672 244.509 568.854 246.164 570.308 248.392L571.983 247.299Z" fill="black"/>
+                        <path id="Ellipse 4" d="M478.922 194.324L478.137 194.943L478.137 194.943L478.922 194.324ZM478.405 178.126L479.229 178.693L479.229 178.693L478.405 178.126ZM485.17 173L473.713 174.437L480.686 183.641L485.17 173ZM486.259 198.034C483.673 197.34 481.375 195.822 479.708 193.705L478.137 194.943C480.069 197.397 482.735 199.159 485.741 199.966L486.259 198.034ZM479.708 193.705C478.041 191.588 477.093 188.984 477.006 186.279L475.007 186.343C475.107 189.473 476.204 192.489 478.137 194.943L479.708 193.705ZM477.006 186.279C476.92 183.574 477.7 180.914 479.229 178.693L477.582 177.559C475.81 180.133 474.908 183.213 475.007 186.343L477.006 186.279Z" fill="black"/>
+                        <path id="Ellipse 5" d="M496.078 177.676L496.863 177.057L496.863 177.057L496.078 177.676ZM496.595 193.874L495.771 193.307L495.771 193.307L496.595 193.874ZM489.83 199L501.287 197.563L494.314 188.359L489.83 199ZM488.741 173.966C491.327 174.66 493.625 176.178 495.292 178.295L496.863 177.057C494.931 174.603 492.265 172.841 489.259 172.034L488.741 173.966ZM495.292 178.295C496.959 180.412 497.907 183.016 497.994 185.721L499.993 185.657C499.893 182.527 498.796 179.511 496.863 177.057L495.292 178.295ZM497.994 185.721C498.08 188.426 497.3 191.086 495.771 193.307L497.418 194.441C499.19 191.867 500.092 188.787 499.993 185.657L497.994 185.721Z" fill="black"/>
+                    </g>
+            
+                    <g id="Nodes">
+                        <circle id="trapNode" cx="230.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="endNode2Let" cx="560.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="endNode1Let" cx="560.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node13Let" cx="487.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node12Let" cx="487.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node11Let" cx="430.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node10Let" cx="357.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node9Let" cx="230.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node8Let" cx="157.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node7Let" cx="84.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node6Let" cx="157.5" cy="334.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node5Let" cx="157.5" cy="261.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node4Let" cx="157.5" cy="42.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node3Let" cx="157.5" cy="115.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node2Let" cx="157.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="StartNodeLet" cx="84.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                    </g>
+                </g>
+            </svg>
+         </div>
+
+        <div id="DFA2" style = "border: 10px solid black; text-align: center; height: 500px;">
+            <!--svg for DFA #2-->
+            <svg height = 100% viewBox="0 0 447 184" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="Frame 3">
+                    <g id = "nodes">
+                        <circle id="endNodeNum" cx="412.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node7Num" cx="340.5" cy="35.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node8Num" cx="340.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node6Num" cx="268.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node5Num" cx="196.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node4Num" cx="124.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node3Num" cx="79.5" cy="148.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="node2Num" cx="79.5" cy="58.5" r="21" stroke="black" stroke-width="3"/>
+                        <circle id="startNodeNum" cx="34.5" cy="103.5" r="21" stroke="black" stroke-width="3"/>
+                    </g>
+
+                    <g id ="arrows">
+                        <path id="Arrow 7" d="M62.0623 70.9377L50.9087 73.9263L59.0737 82.0913L62.0623 70.9377ZM46.6449 87.7694L56.4054 78.0088L54.9912 76.5946L45.2306 86.3551L46.6449 87.7694Z" fill="black"/>
+                        <path id="Arrow 16" d="M324.055 50.0077L312.901 52.9963L321.066 61.1613L324.055 50.0077ZM284.653 90.8239L318.398 57.0788L316.983 55.6646L283.238 89.4097L284.653 90.8239Z" fill="black"/>
+                        <path id="Arrow 17" d="M396.109 90.1091L393.121 78.9555L384.956 87.1205L396.109 90.1091ZM355.293 50.7071L389.038 84.4522L390.452 83.038L356.707 49.2929L355.293 50.7071Z" fill="black"/>
+                        <path id="Arrow 8" d="M107.125 116L95.971 118.989L104.136 127.154L107.125 116ZM91.7071 132.832L101.468 123.071L100.053 121.657L90.2929 131.417L91.7071 132.832Z" fill="black"/>
+                        <path id="Arrow 9" d="M68.1245 129.125L65.1359 117.971L56.971 126.136L68.1245 129.125ZM51.2929 113.707L61.0534 123.468L62.4677 122.053L52.7071 112.293L51.2929 113.707Z" fill="black"/>
+                        <path id="Arrow 10" d="M113.125 85.1245L110.136 73.971L101.971 82.1359L113.125 85.1245ZM96.2929 69.7071L106.053 79.4677L107.468 78.0534L97.7071 68.2929L96.2929 69.7071Z" fill="black"/>
+                        <path id="Arrow 20" d="M74 127L75.2719 115.523L64.6968 120.16L74 127ZM73.1101 78.5439C68.8189 86.9165 66.5755 93.6894 66.0832 100.084C65.5898 106.492 66.8614 112.431 69.454 119.12L71.3188 118.397C68.7944 111.884 67.614 106.254 68.0773 100.237C68.5415 94.2078 70.6634 87.7025 74.8899 79.4561L73.1101 78.5439Z" fill="black"/>
+                        <path id="Arrow 21" d="M85 79L82.6447 90.3042L93.6121 86.6919L85 79ZM85.9086 127.418C89.2847 120.074 91.14 113.849 91.5711 107.525C92.0023 101.202 91.0047 94.8519 88.7753 87.2672L86.8565 87.8312C89.0465 95.2817 89.9853 101.382 89.5758 107.389C89.1663 113.394 87.404 119.377 84.0914 126.582L85.9086 127.418Z" fill="black"/>
+                        <path id="Arrow 11" d="M174 104L164 98.2265V109.774L174 104ZM146 105H165V103H146V105Z" fill="black"/>
+                        <path id="Arrow 13" d="M318 104L308 98.2265V109.774L318 104ZM290 105H309V103H290V105Z" fill="black"/>
+                        <path id="Arrow 15" d="M340 82L345.774 72H334.226L340 82ZM339 58V73H341V58H339Z" fill="black"/>
+                        <path id="Arrow 14" d="M390 104L380 98.2265V109.774L390 104ZM362 105H381V103H362V105Z" fill="black"/>
+                        <path id="Arrow 12" d="M246 104L236 98.2265V109.774L246 104ZM218 105H237V103H218V105Z" fill="black"/>
+                        <path id="Arrow 18" d="M211.5 119.5L215.987 130.14L222.958 120.934L211.5 119.5ZM218.259 125.843C228.155 130.396 246.945 135.689 267.924 136.901C288.9 138.112 312.209 135.252 331.035 123.345L329.965 121.655C311.632 133.251 288.8 136.103 268.04 134.904C247.282 133.705 228.74 128.464 219.095 124.026L218.259 125.843Z" fill="black"/>
+                        <path id="Arrow 19" d="M211 87.4999L221.712 83.1887L212.622 76.0675L211 87.4999ZM183.301 85.9016C176.555 76.8691 176.587 70.5678 179.459 66.5021C182.432 62.2933 188.756 59.9733 195.672 59.6812C202.561 59.3903 209.651 61.1342 213.934 64.6048C216.056 66.3238 217.456 68.4351 217.869 70.9161C218.283 73.4006 217.731 76.3944 215.683 79.9167L217.412 80.9219C219.628 77.1108 220.352 73.6465 219.842 70.5874C219.332 67.5248 217.608 65.0071 215.193 63.0508C210.404 59.1709 202.772 57.3796 195.587 57.683C188.429 57.9853 181.329 60.3892 177.826 65.3482C174.221 70.4504 174.725 77.7608 181.699 87.0984L183.301 85.9016Z" fill="black"/>
+                        <path id="Arrow 22" d="M397.961 119.297L387.242 123.593L396.322 130.727L397.961 119.297ZM425.657 120.936C432.39 129.978 432.349 136.279 429.471 140.341C426.492 144.545 420.164 146.856 413.249 147.138C406.359 147.419 399.272 145.665 394.993 142.188C392.874 140.466 391.477 138.353 391.068 135.871C390.657 133.386 391.214 130.393 393.267 126.874L391.539 125.866C389.318 129.674 388.589 133.137 389.094 136.197C389.6 139.26 391.32 141.78 393.732 143.74C398.515 147.627 406.145 149.429 413.33 149.136C420.489 148.844 427.593 146.451 431.103 141.497C434.714 136.4 434.221 129.089 427.261 119.741L425.657 120.936Z" fill="black"/>
+                    </g>
+
+                    <g id = "labels">
+                        <path id="1" d="M46.9716 70.2727V79H45.9148V71.3807H45.8636L43.733 72.7955V71.7216L45.9148 70.2727H46.9716Z" fill="black"/>
+                        <path id="0" d="M62.75 104.119C62.108 104.119 61.5611 103.945 61.1094 103.595C60.6577 103.243 60.3125 102.733 60.0739 102.065C59.8352 101.395 59.7159 100.585 59.7159 99.6364C59.7159 98.6932 59.8352 97.8878 60.0739 97.2202C60.3153 96.5497 60.6619 96.0384 61.1136 95.6861C61.5682 95.331 62.1136 95.1534 62.75 95.1534C63.3864 95.1534 63.9304 95.331 64.3821 95.6861C64.8366 96.0384 65.1832 96.5497 65.4219 97.2202C65.6634 97.8878 65.7841 98.6932 65.7841 99.6364C65.7841 100.585 65.6648 101.395 65.4261 102.065C65.1875 102.733 64.8423 103.243 64.3906 103.595C63.9389 103.945 63.392 104.119 62.75 104.119ZM62.75 103.182C63.3864 103.182 63.8807 102.875 64.233 102.261C64.5852 101.648 64.7614 100.773 64.7614 99.6364C64.7614 98.8807 64.6804 98.2372 64.5185 97.706C64.3594 97.1747 64.1293 96.7699 63.8281 96.4915C63.5298 96.2131 63.1705 96.0739 62.75 96.0739C62.1193 96.0739 61.6264 96.3849 61.2713 97.0071C60.9162 97.6264 60.7386 98.5028 60.7386 99.6364C60.7386 100.392 60.8182 101.034 60.9773 101.562C61.1364 102.091 61.3651 102.493 61.6634 102.768C61.9645 103.044 62.3267 103.182 62.75 103.182Z" fill="black"/>
+                        <path id="1_2" d="M116.972 67.2727V76H115.915V68.3807H115.864L113.733 69.7955V68.7216L115.915 67.2727H116.972Z" fill="black"/>
+                        <path id="1_3" d="M232.972 87.2727V96H231.915V88.3807H231.864L229.733 89.7955V88.7216L231.915 87.2727H232.972Z" fill="black"/>
+                        <path id="1_4" d="M294.972 62.2727V71H293.915V63.3807H293.864L291.733 64.7955V63.7216L293.915 62.2727H294.972Z" fill="black"/>
+                        <path id="1_5" d="M371.972 108.273V117H370.915V109.381H370.864L368.733 110.795V109.722L370.915 108.273H371.972Z" fill="black"/>
+                        <path id="1_6" d="M393.972 61.2727V70H392.915V62.3807H392.864L390.733 63.7955V62.7216L392.915 61.2727H393.972Z" fill="black"/>
+                        <path id="1, 0" d="M153.972 87.2727V96H152.915V88.3807H152.864L150.733 89.7955V88.7216L152.915 87.2727H153.972ZM157.483 94.8068L157.415 95.267C157.366 95.5909 157.293 95.9375 157.193 96.3068C157.097 96.6761 156.996 97.0241 156.891 97.3509C156.786 97.6776 156.699 97.9375 156.631 98.1307H155.864C155.901 97.9489 155.949 97.7088 156.009 97.4105C156.068 97.1122 156.128 96.7784 156.188 96.4091C156.25 96.0426 156.301 95.6676 156.341 95.2841L156.392 94.8068H157.483ZM165.551 96.1193C164.909 96.1193 164.362 95.9446 163.91 95.5952C163.458 95.2429 163.113 94.733 162.875 94.0653C162.636 93.3949 162.517 92.5852 162.517 91.6364C162.517 90.6932 162.636 89.8878 162.875 89.2202C163.116 88.5497 163.463 88.0384 163.914 87.6861C164.369 87.331 164.914 87.1534 165.551 87.1534C166.187 87.1534 166.731 87.331 167.183 87.6861C167.637 88.0384 167.984 88.5497 168.223 89.2202C168.464 89.8878 168.585 90.6932 168.585 91.6364C168.585 92.5852 168.466 93.3949 168.227 94.0653C167.988 94.733 167.643 95.2429 167.191 95.5952C166.74 95.9446 166.193 96.1193 165.551 96.1193ZM165.551 95.1818C166.187 95.1818 166.681 94.875 167.034 94.2614C167.386 93.6477 167.562 92.7727 167.562 91.6364C167.562 90.8807 167.481 90.2372 167.319 89.706C167.16 89.1747 166.93 88.7699 166.629 88.4915C166.331 88.2131 165.971 88.0739 165.551 88.0739C164.92 88.0739 164.427 88.3849 164.072 89.0071C163.717 89.6264 163.539 90.5028 163.539 91.6364C163.539 92.392 163.619 93.0341 163.778 93.5625C163.937 94.0909 164.166 94.4929 164.464 94.7685C164.765 95.044 165.127 95.1818 165.551 95.1818Z" fill="black"/>
+                        <path id="1, 0_2" d="M404.972 152.273V161H403.915V153.381H403.864L401.733 154.795V153.722L403.915 152.273H404.972ZM408.483 159.807L408.415 160.267C408.366 160.591 408.293 160.938 408.193 161.307C408.097 161.676 407.996 162.024 407.891 162.351C407.786 162.678 407.699 162.938 407.631 163.131H406.864C406.901 162.949 406.949 162.709 407.009 162.411C407.068 162.112 407.128 161.778 407.188 161.409C407.25 161.043 407.301 160.668 407.341 160.284L407.392 159.807H408.483ZM416.551 161.119C415.909 161.119 415.362 160.945 414.91 160.595C414.458 160.243 414.113 159.733 413.875 159.065C413.636 158.395 413.517 157.585 413.517 156.636C413.517 155.693 413.636 154.888 413.875 154.22C414.116 153.55 414.463 153.038 414.914 152.686C415.369 152.331 415.914 152.153 416.551 152.153C417.187 152.153 417.731 152.331 418.183 152.686C418.637 153.038 418.984 153.55 419.223 154.22C419.464 154.888 419.585 155.693 419.585 156.636C419.585 157.585 419.466 158.395 419.227 159.065C418.988 159.733 418.643 160.243 418.191 160.595C417.74 160.945 417.193 161.119 416.551 161.119ZM416.551 160.182C417.187 160.182 417.681 159.875 418.034 159.261C418.386 158.648 418.562 157.773 418.562 156.636C418.562 155.881 418.481 155.237 418.319 154.706C418.16 154.175 417.93 153.77 417.629 153.491C417.331 153.213 416.971 153.074 416.551 153.074C415.92 153.074 415.427 153.385 415.072 154.007C414.717 154.626 414.539 155.503 414.539 156.636C414.539 157.392 414.619 158.034 414.778 158.562C414.937 159.091 415.166 159.493 415.464 159.768C415.765 160.044 416.127 160.182 416.551 160.182Z" fill="black"/>
+                        <path id="0_2" d="M52.75 136.119C52.108 136.119 51.5611 135.945 51.1094 135.595C50.6577 135.243 50.3125 134.733 50.0739 134.065C49.8352 133.395 49.7159 132.585 49.7159 131.636C49.7159 130.693 49.8352 129.888 50.0739 129.22C50.3153 128.55 50.6619 128.038 51.1136 127.686C51.5682 127.331 52.1136 127.153 52.75 127.153C53.3864 127.153 53.9304 127.331 54.3821 127.686C54.8366 128.038 55.1832 128.55 55.4219 129.22C55.6634 129.888 55.7841 130.693 55.7841 131.636C55.7841 132.585 55.6648 133.395 55.4261 134.065C55.1875 134.733 54.8423 135.243 54.3906 135.595C53.9389 135.945 53.392 136.119 52.75 136.119ZM52.75 135.182C53.3864 135.182 53.8807 134.875 54.233 134.261C54.5852 133.648 54.7614 132.773 54.7614 131.636C54.7614 130.881 54.6804 130.237 54.5185 129.706C54.3594 129.175 54.1293 128.77 53.8281 128.491C53.5298 128.213 53.1705 128.074 52.75 128.074C52.1193 128.074 51.6264 128.385 51.2713 129.007C50.9162 129.626 50.7386 130.503 50.7386 131.636C50.7386 132.392 50.8182 133.034 50.9773 133.562C51.1364 134.091 51.3651 134.493 51.6634 134.768C51.9645 135.044 52.3267 135.182 52.75 135.182Z" fill="black"/>
+                        <path id="0_3" d="M195.75 53.1193C195.108 53.1193 194.561 52.9446 194.109 52.5952C193.658 52.2429 193.313 51.733 193.074 51.0653C192.835 50.3949 192.716 49.5852 192.716 48.6364C192.716 47.6932 192.835 46.8878 193.074 46.2202C193.315 45.5497 193.662 45.0384 194.114 44.6861C194.568 44.331 195.114 44.1534 195.75 44.1534C196.386 44.1534 196.93 44.331 197.382 44.6861C197.837 45.0384 198.183 45.5497 198.422 46.2202C198.663 46.8878 198.784 47.6932 198.784 48.6364C198.784 49.5852 198.665 50.3949 198.426 51.0653C198.188 51.733 197.842 52.2429 197.391 52.5952C196.939 52.9446 196.392 53.1193 195.75 53.1193ZM195.75 52.1818C196.386 52.1818 196.881 51.875 197.233 51.2614C197.585 50.6477 197.761 49.7727 197.761 48.6364C197.761 47.8807 197.68 47.2372 197.518 46.706C197.359 46.1747 197.129 45.7699 196.828 45.4915C196.53 45.2131 196.17 45.0739 195.75 45.0739C195.119 45.0739 194.626 45.3849 194.271 46.0071C193.916 46.6264 193.739 47.5028 193.739 48.6364C193.739 49.392 193.818 50.0341 193.977 50.5625C194.136 51.0909 194.365 51.4929 194.663 51.7685C194.964 52.044 195.327 52.1818 195.75 52.1818Z" fill="black"/>
+                        <path id="0_4" d="M270.75 148.119C270.108 148.119 269.561 147.945 269.109 147.595C268.658 147.243 268.313 146.733 268.074 146.065C267.835 145.395 267.716 144.585 267.716 143.636C267.716 142.693 267.835 141.888 268.074 141.22C268.315 140.55 268.662 140.038 269.114 139.686C269.568 139.331 270.114 139.153 270.75 139.153C271.386 139.153 271.93 139.331 272.382 139.686C272.837 140.038 273.183 140.55 273.422 141.22C273.663 141.888 273.784 142.693 273.784 143.636C273.784 144.585 273.665 145.395 273.426 146.065C273.188 146.733 272.842 147.243 272.391 147.595C271.939 147.945 271.392 148.119 270.75 148.119ZM270.75 147.182C271.386 147.182 271.881 146.875 272.233 146.261C272.585 145.648 272.761 144.773 272.761 143.636C272.761 142.881 272.68 142.237 272.518 141.706C272.359 141.175 272.129 140.77 271.828 140.491C271.53 140.213 271.17 140.074 270.75 140.074C270.119 140.074 269.626 140.385 269.271 141.007C268.916 141.626 268.739 142.503 268.739 143.636C268.739 144.392 268.818 145.034 268.977 145.562C269.136 146.091 269.365 146.493 269.663 146.768C269.964 147.044 270.327 147.182 270.75 147.182Z" fill="black"/>
+                        <path id="0_5" d="M331.75 71.1193C331.108 71.1193 330.561 70.9446 330.109 70.5952C329.658 70.2429 329.313 69.733 329.074 69.0653C328.835 68.3949 328.716 67.5852 328.716 66.6364C328.716 65.6932 328.835 64.8878 329.074 64.2202C329.315 63.5497 329.662 63.0384 330.114 62.6861C330.568 62.331 331.114 62.1534 331.75 62.1534C332.386 62.1534 332.93 62.331 333.382 62.6861C333.837 63.0384 334.183 63.5497 334.422 64.2202C334.663 64.8878 334.784 65.6932 334.784 66.6364C334.784 67.5852 334.665 68.3949 334.426 69.0653C334.188 69.733 333.842 70.2429 333.391 70.5952C332.939 70.9446 332.392 71.1193 331.75 71.1193ZM331.75 70.1818C332.386 70.1818 332.881 69.875 333.233 69.2614C333.585 68.6477 333.761 67.7727 333.761 66.6364C333.761 65.8807 333.68 65.2372 333.518 64.706C333.359 64.1747 333.129 63.7699 332.828 63.4915C332.53 63.2131 332.17 63.0739 331.75 63.0739C331.119 63.0739 330.626 63.3849 330.271 64.0071C329.916 64.6264 329.739 65.5028 329.739 66.6364C329.739 67.392 329.818 68.0341 329.977 68.5625C330.136 69.0909 330.365 69.4929 330.663 69.7685C330.964 70.044 331.327 70.1818 331.75 70.1818Z" fill="black"/>
+                        <path id="0_6" d="M303.75 94.1193C303.108 94.1193 302.561 93.9446 302.109 93.5952C301.658 93.2429 301.313 92.733 301.074 92.0653C300.835 91.3949 300.716 90.5852 300.716 89.6364C300.716 88.6932 300.835 87.8878 301.074 87.2202C301.315 86.5497 301.662 86.0384 302.114 85.6861C302.568 85.331 303.114 85.1534 303.75 85.1534C304.386 85.1534 304.93 85.331 305.382 85.6861C305.837 86.0384 306.183 86.5497 306.422 87.2202C306.663 87.8878 306.784 88.6932 306.784 89.6364C306.784 90.5852 306.665 91.3949 306.426 92.0653C306.188 92.733 305.842 93.2429 305.391 93.5952C304.939 93.9446 304.392 94.1193 303.75 94.1193ZM303.75 93.1818C304.386 93.1818 304.881 92.875 305.233 92.2614C305.585 91.6477 305.761 90.7727 305.761 89.6364C305.761 88.8807 305.68 88.2372 305.518 87.706C305.359 87.1747 305.129 86.7699 304.828 86.4915C304.53 86.2131 304.17 86.0739 303.75 86.0739C303.119 86.0739 302.626 86.3849 302.271 87.0071C301.916 87.6264 301.739 88.5028 301.739 89.6364C301.739 90.392 301.818 91.0341 301.977 91.5625C302.136 92.0909 302.365 92.4929 302.663 92.7685C302.964 93.044 303.327 93.1818 303.75 93.1818Z" fill="black"/>
+                        <path id="1_7" d="M96.9716 95.2727V104H95.9148V96.3807H95.8636L93.733 97.7955V96.7216L95.9148 95.2727H96.9716Z" fill="black"/>
+                        <path id="0_7" d="M108.75 136.119C108.108 136.119 107.561 135.945 107.109 135.595C106.658 135.243 106.313 134.733 106.074 134.065C105.835 133.395 105.716 132.585 105.716 131.636C105.716 130.693 105.835 129.888 106.074 129.22C106.315 128.55 106.662 128.038 107.114 127.686C107.568 127.331 108.114 127.153 108.75 127.153C109.386 127.153 109.93 127.331 110.382 127.686C110.837 128.038 111.183 128.55 111.422 129.22C111.663 129.888 111.784 130.693 111.784 131.636C111.784 132.585 111.665 133.395 111.426 134.065C111.188 134.733 110.842 135.243 110.391 135.595C109.939 135.945 109.392 136.119 108.75 136.119ZM108.75 135.182C109.386 135.182 109.881 134.875 110.233 134.261C110.585 133.648 110.761 132.773 110.761 131.636C110.761 130.881 110.68 130.237 110.518 129.706C110.359 129.175 110.129 128.77 109.828 128.491C109.53 128.213 109.17 128.074 108.75 128.074C108.119 128.074 107.626 128.385 107.271 129.007C106.916 129.626 106.739 130.503 106.739 131.636C106.739 132.392 106.818 133.034 106.977 133.562C107.136 134.091 107.365 134.493 107.663 134.768C107.964 135.044 108.327 135.182 108.75 135.182Z" fill="black"/>
+                    </g>
+                </g>
+            </svg><br>
+        </div>
         
         
         <button type="button" class="button" onclick =changeColor()>try</button>
-        <button type="button" class="button" onclick =testNode()>trying</button><br>
-        <label for="input string">First name:</label>
+        <label for="input string" style="font-size: xx-large;">String to check:</label>
         <input type="text" id="input string" >
-        <button type="button" class="button" onclick =getTraversedNodes()>Test String</button><br>
+        <!--button type="button" class="button" onclick =getTraversedNodes()>Test String</button--><br>
     </body>
 </html>
