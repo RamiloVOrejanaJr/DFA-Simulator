@@ -162,9 +162,13 @@ let is_string_valid = null;
     else {
         document.getElementById("result").innerHTML = "String is invalid.";
     }
+}
 
+//simulate the DFA visually
+function simulateDFA(){
+    getTraversedNodes();
     changeColor();
-};
+}
 
 //code taken from stackoverflow; basically just waits for specified amount of milliseconds
 // Returns a Promise that resolves after "ms" Milliseconds
@@ -185,10 +189,9 @@ async function changeColor(){   //"async" keyword apparently required for "await
     } 
 }
 
-
-
-function showStart(){ //sets CSS when loading the website
+function showStart(){ //things to show on startup of the web app
     document.getElementById("simulator").innerHTML = document.getElementById("DFA1").innerHTML;
+    document.getElementById("regex").innerHTML = document.getElementById("regex1").innerHTML;
     //document.getElementsByClassName("labels").style.fontFamily = "Is-serif";
 }
 
@@ -200,6 +203,8 @@ function openDFA1(){ //changes current DFA being simulated to DFA number 1
     document.getElementById("simulator").innerHTML = document.getElementById("DFA1").innerHTML;
     currentDFA = "DFA1"
     currentNode = startNodeLet
+    document.getElementById("regex").innerHTML = document.getElementById("regex1").innerHTML;
+    document.getElementById("pdaContainer").src = "PDA1.png";
 }
 
 function openDFA2(){ //changes current DFA being simulated to DFA number 1
@@ -210,4 +215,6 @@ function openDFA2(){ //changes current DFA being simulated to DFA number 1
     document.getElementById("simulator").innerHTML = document.getElementById("DFA2").innerHTML;
     currentDFA = "DFA2"
     currentNode = startNodeNum
+    document.getElementById("regex").innerHTML = document.getElementById("regex2").innerHTML;
+    document.getElementById("pdaContainer").src = "PDA2.png";
 }
