@@ -8,12 +8,12 @@
 .menubar{
     border: 5px solid black;
     height: 100px;
-
 }
 
 #DFA1{
-    max-width: inherit;
-    max-height: inherit;   
+    position:relative;
+    max-width: 75%;
+    max-height: inherit;
 }
 
 #DFA2{
@@ -33,33 +33,24 @@
     float: right;
 }
 
-/* #screen{   
-    border: 5px solid red; 
-} */
+#screen{   
+    border: 5px solid black; 
+    display:flex;
+
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
 #controls{
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 3px solid black; 
-    width: 49%;
-    height: 250px;
+    width: 50%;    
     text-align: center;
 } 
 
 #simulator{
-    position: absolute;
-    top: 50%;
-    /* left: 51%; */
-    right: 0px;
-    transform: translateY(-50%);
-    width: 49%;
-    /* float:  right; */
+    width: 50%;
+    border: 1px solid gray;
 }
-
-/* .labels{
-    font-family: 'Times New Roman', Times, serif;
-} */
 
 #container{
     display: none;
@@ -67,4 +58,33 @@
 
 text{
     font-family: 'Courier New', Courier, monospace;
+}
+
+#cfgContainer{
+    align-self: center;
+    text-align: center;
+    font-size: x-large;
+    width:50%;
+}
+
+#PDA{
+    border: 1px solid gray;
+    text-align: center;
+    width: 50%;
+    max-width:100%;
+}
+
+.buttonControls{
+    width:49%;
+    height: 65px;
+    font-size: large;
+}
+
+label{
+    font-family: sans-serif;
+    font-size: xx-large;
+}
+
+#input string{
+    height: 100px;
 }
