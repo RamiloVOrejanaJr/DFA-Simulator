@@ -1,0 +1,70 @@
+.button {
+    height: 100px;
+    width: 100px;
+    font-size: x-large;
+    
+}
+
+.menubar{
+    border: 5px solid black;
+    height: 100px;
+
+}
+
+#DFA1{
+    max-width: inherit;
+    max-height: inherit;   
+}
+
+#DFA2{
+    max-width: inherit;
+    max-height: inherit;
+}
+
+#btn1{
+    width: 50%; 
+    height: 100%; 
+    float: left;
+}
+
+#btn2{
+    width: 50%; 
+    height: 100%; 
+    float: right;
+}
+
+/* #screen{   
+    border: 5px solid red; 
+} */
+
+#controls{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 3px solid black; 
+    width: 49%;
+    height: 250px;
+    text-align: center;
+} 
+
+#simulator{
+    position: absolute;
+    top: 50%;
+    /* left: 51%; */
+    right: 0px;
+    transform: translateY(-50%);
+    width: 49%;
+    /* float:  right; */
+}
+
+/* .labels{
+    font-family: 'Times New Roman', Times, serif;
+} */
+
+#container{
+    display: none;
+}
+
+text{
+    font-family: 'Courier New', Courier, monospace;
+}
