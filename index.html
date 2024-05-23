@@ -11,132 +11,178 @@
 
     <body onload=showStart()>
         <div class="menubar" >
-            <button type="button" class = "button" id="btn1" onclick=openDFA1()> Regex 1: (bab)*(b+a)(bab+aba)(a+b)*(aa+bb)*(b+a+bb)(a+b)*(aa+bb)</button>
+            <button type="button" class = "button" id="btn1" onclick=openDFA1()> Regex 1</button>
             <button type="button" class = "button" id= "btn2" onclick=openDFA2()> Regex 2:</button>
         </div><br>
         
         <div id="screen" >
-            <div id="controls">                
-                <label for="input string" style="font-size: xx-large;">String to check:</label>
+            <div id="controls">
+                <label id="regex">Regex being simulated: (bab)*(b+a)(bab+aba)(a+b)*(aa+bb)*(b+a+bb)(a+b)*(aa+bb)</label>
+                <label for="input string">String to check:</label>
                 <input type="text" id="input string" >
-                <br>
-                <button type="button" class="button" onclick =getTraversedNodes()>try</button>
-                <br>
-                <text style="font-size: xx-large;" id="result"> </text>
+                <br><br>
+                <button type="button" class="buttonControls" onclick =getTraversedNodes()>Validate String</button>
+                <button type="button" class="buttonControls" onclick =simulateDFA()>Simulate String</button>
+                <br><br><br>
+                <label style="font-size: xxx-large;" id="result">⠀<br></label>
             </div>
 
             <div id="simulator">
             </div>
         </div>
+        <br>
+
+        <div id="screen" >
+            <div id="cfgContainer">
+                <text id>CFG:<br>
+
+                    S-> BCDABEFAB <br>
+                    A->1|0<br>
+                    B-> 1B|0B|null<br>
+                    C-> 11|00<br>
+                    D-> 11D|00D|null<br>
+                    E-> 101|111<br>
+                    F-> 101F|111F|null<br>
+                    </text>
+            </div>
+
+            <div id="PDA">
+                <text>PDA</text><br>
+                <img id="pdaContainer" src="PDA1.png" style="max-width: 75%;">
+            </div>
+        </div>
+
+        <br>
         
+        <!--invisible container div for all data that will be shown based on button clicks and which DFA is 
+                selected-->
         <div id="container">
+            <label id="regex1">Regex being simulated: <br>(bab)*(b+a)(bab+aba)(a+b)*(aa+bb)*(b+a+bb)(a+b)*(aa+bb)<br><br></label>
+            <label id="regex2">Regex being simulated: <br>(1+0)*(11+00)(00+11)*(1+0+11)(1+0+11)*(101+111)(101+111)*(1+0*+11)(1+0*+11)*<br><br></label>
+
+            <text id="CFG1">CFG:<br>
+                S-> BCDABEFAB <br>
+                A->1|0<br>
+                B-> 1B|0B|null<br>
+                C-> 11|00<br>
+                D-> 11D|00D|null<br>
+                E-> 101|111<br>
+                F-> 101F|111F|null<br>
+            </text>
+
+            <text id="CFG2">
+
+            </text>
+
+
             <div id="DFA1">
                 
-                
-                <svg viewBox="0 0 627 474" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <center>
+                    <svg id="DFA1" viewBox="0 0 627 474" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-                    <g id="Labels" class="labels">
-                        <text id="T" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="226" y="193.864">T</tspan></text>
-                        <text id="N5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="265.864">N5</tspan></text>
-                        <text id="N6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="338.864">N6</tspan></text>
-                        <text id="N7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="76" y="411.864">N7</tspan></text>
-                        <text id="N8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="411.864">N8</tspan></text>
-                        <text id="N9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="222" y="411.864">N9</tspan></text>
-                        <text id="N10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="345" y="189.864">N10</tspan></text>
-                        <text id="N11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="419" y="189.864">N11</tspan></text>
-                        <text id="N12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="477" y="154.271">N12</tspan></text>
-                        <text id="N13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="477" y="225.864">N13</tspan></text>
-                        <text id="N3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="119.864">N3</tspan></text>
-                        <text id="N4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="46.8636">N4</tspan></text>
-                        <text id="-" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="78" y="197.227">-</tspan></text>
-                        <text id="+" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="158.227">+</tspan></text>
-                        <text id="+_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="230.227">+</tspan></text>
-                        <text id="a" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="114" y="181.864">a</tspan></text>
-                        <text id="a_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="224.864">a</tspan></text>
-                        <text id="a_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="194" y="235.864">a</tspan></text>
-                        <text id="a_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="114" y="399.864">a</tspan></text>
-                        <text id="a_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="262" y="349.864">a</tspan></text>
-                        <text id="a_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="241" y="281.864">a</tspan></text>
-                        <text id="a_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="502" y="189.864">a</tspan></text>
-                        <text id="a_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="445" y="225.864">a</tspan></text>
-                        <text id="a_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="520" y="233.864">a</tspan></text>
-                        <text id="a_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="532" y="171.864">a</tspan></text>
-                        <text id="a_11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="557" y="276.864">a</tspan></text>
-                        <text id="a_12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="301" y="399.864">a</tspan></text>
-                        <text id="a_13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="83.8636">a</tspan></text>
-                        <text id="a_14" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="208" y="103.864">a</tspan></text>
-                        <text id="a, b" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="254" y="170.864">a, b</tspan></text>
-                        <text id="a, b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="383" y="170.864">a, b</tspan></text>
-                        <text id="b" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="158.864">b</tspan></text>
-                        <text id="b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="193" y="149.864">b</tspan></text>
-                        <text id="b_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="265" y="38.8636">b</tspan></text>
-                        <text id="b_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="465" y="189.864">b</tspan></text>
-                        <text id="b_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="445" y="154.864">b</tspan></text>
-                        <text id="b_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="520" y="143.864">b</tspan></text>
-                        <text id="b_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="532" y="207.864">b</tspan></text>
-                        <text id="b_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="557" y="100.864">b</tspan></text>
-                        <text id="b_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="299.864">b</tspan></text>
-                        <text id="b_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="90" y="284.864">b</tspan></text>
-                        <text id="b_11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="208" y="280.864">b</tspan></text>
-                        <text id="b_12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="187" y="399.864">b</tspan></text>
-                        <text id="b_13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="154" y="445.864">b</tspan></text>
-                        <text id="b_14" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="31" y="284.864">b</tspan></text>
-                        <text id="N2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="150" y="193.864">N2</tspan></text>
-                    </g>
-                
-                    <g id="Arrows">
-                        <path id="Arrow 11" d="M157 138L151.226 148H162.774L157 138ZM158 166V147H156V166H158Z" fill="black"/>
-                        <path id="Arrow 23" d="M135 189L125 183.226V194.774L135 189ZM107 190H126V188H107V190Z" fill="black"/>
-                        <path id="Arrow 25" d="M135 408L125 402.226V413.774L135 408ZM107 409H126V407H107V409Z" fill="black"/>
-                        <path id="Arrow 21" d="M157 239L162.774 229H151.226L157 239ZM156 211V230H158V211H156Z" fill="black"/>
-                        <path id="Arrow 32" d="M408 186L398 180.226V191.774L408 186ZM380 187H399V185H380V187Z" fill="black"/>
-                        <path id="Arrow 35" d="M464.799 151L453.645 153.989L461.81 162.154L464.799 151ZM445.707 171.506L459.142 158.071L457.728 156.657L444.293 170.092L445.707 171.506Z" fill="black"/>
-                        <path id="Arrow 37" d="M504.824 207.528L515.977 204.539L507.812 196.374L504.824 207.528ZM511.895 201.871L546.884 166.882L545.469 165.468L510.48 200.457L511.895 201.871Z" fill="black"/>
-                        <path id="Arrow 38" d="M505 164L507.989 175.154L516.154 166.989L505 164ZM510.657 171.071L545.646 206.06L547.06 204.646L512.071 169.657L510.657 171.071Z" fill="black"/>
-                        <path id="Arrow 36" d="M464.799 221.799L461.81 210.645L453.645 218.81L464.799 221.799ZM444.293 202.707L457.728 216.142L459.142 214.728L445.707 201.293L444.293 202.707Z" fill="black"/>
-                        <path id="Arrow 33" d="M538 151L528 145.226V156.774L538 151ZM510 152H529V150H510V152Z" fill="black"/>
-                        <path id="Arrow 22" d="M157 312L162.774 302H151.226L157 312ZM156 284V303H158V284H156Z" fill="black"/>
-                        <path id="Arrow 28" d="M230 211L220.857 218.052L231.536 222.444L230 211ZM179.925 335.38L227.501 219.704L225.652 218.943L178.075 334.62L179.925 335.38Z" fill="black"/>
-                        <path id="Arrow 31" d="M208 189L198.942 196.162L209.674 200.425L208 189ZM179.929 262.369L205.607 197.733L203.748 196.995L178.071 261.631L179.929 262.369Z" fill="black"/>
-                        <path id="Arrow 29" d="M230 166L231.503 154.551L220.837 158.974L230 166ZM178.076 43.383L225.629 158.069L227.477 157.303L179.924 42.617L178.076 43.383Z" fill="black"/>
-                        <path id="Arrow 30" d="M208 189L209.674 177.575L198.942 181.838L208 189ZM178.071 116.369L203.748 181.005L205.607 180.267L179.929 115.631L178.071 116.369Z" fill="black"/>
-                        <path id="Arrow 24" d="M84 385L89.7735 375H78.2265L84 385ZM83 211L83 376H85L85 211H83Z" fill="black"/>
-                        <path id="Arrow 26" d="M208 408L198 402.226V413.774L208 408ZM180 409H199V407H180V409Z" fill="black"/>
-                        <path id="Arrow 34" d="M538 222L528 216.226V227.774L538 222ZM510 223H529V221H510V223Z" fill="black"/>
-                        <path id="Arrow 20" d="M157 65L151.226 75H162.774L157 65ZM158 93V74H156V93H158Z" fill="black"/>
-                        <path id="Rectangle 1" d="M136.5 116L126.5 110.226V121.774L136.5 116ZM59 117H127.5V115H59V117ZM46 394V130H44V394H46ZM64 407H59V409H64V407ZM44 394C44 402.284 50.7157 409 59 409V407C51.8203 407 46 401.18 46 394H44ZM59 115C50.7157 115 44 121.716 44 130H46C46 122.82 51.8203 117 59 117V115Z" fill="black"/>
-                        <path id="Rectangle 2" d="M84 430L78.2265 440H89.7735L84 430ZM85 440V439H83V440H85ZM216 453H98V455H216V453ZM229 430V440H231V430H229ZM216 455C224.284 455 231 448.284 231 440H229C229 447.18 223.18 453 216 453V455ZM83 440C83 448.284 89.7157 455 98 455V453C90.8203 453 85 447.18 85 440H83Z" fill="black"/>
-                        <path id="Vector 1" d="M335 186L325 180.226V191.774L335 186ZM180 336H296.271V334H180V336ZM316.271 187H326V185H316.271V187ZM307.271 325V253.727H305.271V325H307.271ZM307.271 253.727V196H305.271V253.727H307.271ZM316.271 185C310.196 185 305.271 189.925 305.271 196H307.271C307.271 191.029 311.3 187 316.271 187V185ZM296.271 336C302.346 336 307.271 331.075 307.271 325H305.271C305.271 329.971 301.242 334 296.271 334V336Z" fill="black"/>
-                        <path id="Vector 4" d="M236.5 211.5L230.726 221.5H242.274L236.5 211.5ZM159.25 387.661L234.752 301.995L233.252 300.673L157.75 386.339L159.25 387.661ZM237.5 294.722V220.5H235.5V294.722H237.5ZM234.752 301.995C236.523 299.986 237.5 297.4 237.5 294.722H235.5C235.5 296.913 234.701 299.029 233.252 300.673L234.752 301.995Z" fill="black"/>
-                        <path id="Vector 2" d="M357 164L362.773 154H351.226L357 164ZM179 46H347V44H179V46ZM356 55V155H358V55H356ZM347 46C351.971 46 356 50.0294 356 55H358C358 48.9249 353.075 44 347 44V46Z" fill="black"/>
-                        <path id="Vector 3" d="M357 208L362.774 218H351.226L357 208ZM253 407H347V409H253V407ZM356 398V217H358V398H356ZM347 407C351.971 407 356 402.971 356 398H358C358 404.075 353.075 409 347 409V407Z" fill="black"/>
-                        <path id="Ellipse 1" d="M253.06 193.391L255.496 204.678L264.053 196.926L253.06 193.391ZM277.11 188.613L276.11 188.612L277.11 188.613ZM274.274 180.682L273.501 181.316L274.274 180.682ZM258.243 200.514C260.998 201.987 264.177 202.46 267.241 201.851L266.851 199.889C264.241 200.408 261.533 200.006 259.187 198.751L258.243 200.514ZM267.241 201.851C270.304 201.242 273.062 199.59 275.044 197.177L273.498 195.907C271.81 197.964 269.46 199.371 266.851 199.889L267.241 201.851ZM275.044 197.177C277.026 194.763 278.109 191.736 278.11 188.613L276.11 188.612C276.109 191.273 275.186 193.851 273.498 195.907L275.044 197.177ZM278.11 188.613C278.111 185.49 277.028 182.463 275.047 180.048L273.501 181.316C275.188 183.373 276.11 185.952 276.11 188.612L278.11 188.613ZM275.047 180.048C273.067 177.633 270.31 175.98 267.246 175.37L266.856 177.331C269.465 177.851 271.814 179.259 273.501 181.316L275.047 180.048ZM267.246 175.37C264.183 174.76 261.003 175.231 258.249 176.703L259.191 178.467C261.538 177.213 264.247 176.812 266.856 177.331L267.246 175.37ZM258.249 176.703C255.494 178.174 253.334 180.556 252.139 183.441L253.986 184.207C255.005 181.749 256.844 179.72 259.191 178.467L258.249 176.703Z" fill="black"/>
-                        <path id="Ellipse 2" d="M566.451 128.764L577.482 125.351L569.01 117.505L566.451 128.764ZM559.586 105.225L559.674 106.222L559.586 105.225ZM551.935 108.744L552.634 109.459L551.935 108.744ZM573.094 122.978C574.32 120.105 574.512 116.897 573.638 113.898L571.718 114.458C572.463 117.012 572.299 119.746 571.254 122.193L573.094 122.978ZM573.638 113.898C572.763 110.9 570.876 108.297 568.298 106.534L567.169 108.185C569.365 109.687 570.973 111.904 571.718 114.458L573.638 113.898ZM568.298 106.534C565.72 104.771 562.611 103.957 559.499 104.229L559.674 106.222C562.324 105.989 564.973 106.683 567.169 108.185L568.298 106.534ZM559.499 104.229C556.388 104.502 553.467 105.845 551.235 108.029L552.634 109.459C554.535 107.598 557.023 106.454 559.674 106.222L559.499 104.229ZM551.235 108.029C549.003 110.214 547.597 113.105 547.258 116.21L549.246 116.427C549.535 113.782 550.733 111.32 552.634 109.459L551.235 108.029ZM547.258 116.21C546.918 119.315 547.666 122.441 549.373 125.057L551.048 123.963C549.593 121.735 548.957 119.072 549.246 116.427L547.258 116.21ZM549.373 125.057C551.08 127.672 553.641 129.615 556.62 130.553L557.221 128.646C554.684 127.846 552.502 126.191 551.048 123.963L549.373 125.057Z" fill="black"/>
-                        <path id="Ellipse 3" d="M554.904 243.591L543.873 247.005L552.345 254.851L554.904 243.591ZM561.769 267.13L561.682 266.134L561.769 267.13ZM569.421 263.611L568.721 262.896L569.421 263.611ZM548.262 249.377C547.035 252.25 546.843 255.459 547.718 258.457L549.638 257.897C548.893 255.343 549.056 252.61 550.101 250.163L548.262 249.377ZM547.718 258.457C548.592 261.456 550.479 264.058 553.057 265.821L554.186 264.17C551.99 262.668 550.382 260.451 549.638 257.897L547.718 258.457ZM553.057 265.821C555.635 267.584 558.745 268.399 561.856 268.126L561.682 266.134C559.031 266.366 556.382 265.672 554.186 264.17L553.057 265.821ZM561.856 268.126C564.968 267.853 567.888 266.51 570.12 264.326L568.721 262.896C566.82 264.757 564.332 265.902 561.682 266.134L561.856 268.126ZM570.12 264.326C572.352 262.141 573.758 259.25 574.098 256.145L572.109 255.928C571.82 258.573 570.623 261.036 568.721 262.896L570.12 264.326ZM574.098 256.145C574.437 253.041 573.69 249.914 571.983 247.299L570.308 248.392C571.762 250.62 572.399 253.283 572.109 255.928L574.098 256.145ZM571.983 247.299C570.275 244.683 567.714 242.741 564.735 241.802L564.134 243.709C566.672 244.509 568.854 246.164 570.308 248.392L571.983 247.299Z" fill="black"/>
-                        <path id="Ellipse 4" d="M478.922 194.324L478.137 194.943H478.137L478.922 194.324ZM478.405 178.126L479.229 178.693L478.405 178.126ZM485.17 173L473.713 174.437L480.686 183.641L485.17 173ZM486.259 198.034C483.673 197.34 481.375 195.822 479.708 193.705L478.137 194.943C480.069 197.397 482.735 199.159 485.741 199.966L486.259 198.034ZM479.708 193.705C478.041 191.588 477.093 188.984 477.006 186.279L475.007 186.343C475.107 189.473 476.204 192.489 478.137 194.943L479.708 193.705ZM477.006 186.279C476.92 183.574 477.7 180.914 479.229 178.693L477.582 177.559C475.81 180.133 474.908 183.213 475.007 186.343L477.006 186.279Z" fill="black"/>
-                        <path id="Ellipse 5" d="M496.078 177.676L496.863 177.057H496.863L496.078 177.676ZM496.595 193.874L495.771 193.307L496.595 193.874ZM489.83 199L501.287 197.563L494.314 188.359L489.83 199ZM488.741 173.966C491.327 174.66 493.625 176.178 495.292 178.295L496.863 177.057C494.931 174.603 492.265 172.841 489.259 172.034L488.741 173.966ZM495.292 178.295C496.959 180.412 497.907 183.016 497.994 185.721L499.993 185.657C499.893 182.527 498.796 179.511 496.863 177.057L495.292 178.295ZM497.994 185.721C498.08 188.426 497.3 191.086 495.771 193.307L497.418 194.441C499.19 191.867 500.092 188.787 499.993 185.657L497.994 185.721Z" fill="black"/>
-                    </g>
-                
-                    <g id="Nodes">
-                        <circle id="trapNode" cx="230.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="endNode2Let" cx="560.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="endNode1Let" cx="560.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node13Let" cx="487.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node12Let" cx="487.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node11Let" cx="430.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node10Let" cx="357.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node9Let" cx="230.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node8Let" cx="157.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node7Let" cx="84.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node6Let" cx="157.5" cy="334.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node5Let" cx="157.5" cy="261.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node4Let" cx="157.5" cy="42.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node3Let" cx="157.5" cy="115.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="node2Let" cx="157.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
-                        <circle id="startNodeLet" cx="84.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
-                    </g>
+                        <g id="Labels" class="labels">
+                            <text id="T" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" font-weight="bold" letter-spacing="0em"><tspan x="226" y="193.864">T</tspan></text>
+                            <text id="N5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="265.864">N5</tspan></text>
+                            <text id="N6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="338.864">N6</tspan></text>
+                            <text id="N7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="76" y="411.864">N7</tspan></text>
+                            <text id="N8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="411.864">N8</tspan></text>
+                            <text id="N9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="222" y="411.864">N9</tspan></text>
+                            <text id="N10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="345" y="189.864">N10</tspan></text>
+                            <text id="N11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="419" y="189.864">N11</tspan></text>
+                            <text id="N12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="477" y="154.271">N12</tspan></text>
+                            <text id="N13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="477" y="225.864">N13</tspan></text>
+                            <text id="N3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="119.864">N3</tspan></text>
+                            <text id="N4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="149" y="46.8636">N4</tspan></text>
+                            <text id="-" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="78" y="197.227">-</tspan></text>
+                            <text id="+" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="158.227">+</tspan></text>
+                            <text id="+_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="24" font-weight="bold" letter-spacing="0em"><tspan x="552" y="230.227">+</tspan></text>
+                            <text id="a" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="114" y="181.864">a</tspan></text>
+                            <text id="a_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="224.864">a</tspan></text>
+                            <text id="a_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="194" y="235.864">a</tspan></text>
+                            <text id="a_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="114" y="399.864">a</tspan></text>
+                            <text id="a_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="262" y="349.864">a</tspan></text>
+                            <text id="a_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="241" y="281.864">a</tspan></text>
+                            <text id="a_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="502" y="189.864">a</tspan></text>
+                            <text id="a_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="445" y="225.864">a</tspan></text>
+                            <text id="a_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="520" y="233.864">a</tspan></text>
+                            <text id="a_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="532" y="171.864">a</tspan></text>
+                            <text id="a_11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="557" y="276.864">a</tspan></text>
+                            <text id="a_12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="301" y="399.864">a</tspan></text>
+                            <text id="a_13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="83.8636">a</tspan></text>
+                            <text id="a_14" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="208" y="103.864">a</tspan></text>
+                            <text id="a, b" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="254" y="170.864">a, b</tspan></text>
+                            <text id="a, b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="383" y="170.864">a, b</tspan></text>
+                            <text id="b" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="158.864">b</tspan></text>
+                            <text id="b_2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="193" y="149.864">b</tspan></text>
+                            <text id="b_3" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="265" y="38.8636">b</tspan></text>
+                            <text id="b_4" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="465" y="189.864">b</tspan></text>
+                            <text id="b_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="445" y="154.864">b</tspan></text>
+                            <text id="b_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="520" y="143.864">b</tspan></text>
+                            <text id="b_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="532" y="207.864">b</tspan></text>
+                            <text id="b_8" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="557" y="100.864">b</tspan></text>
+                            <text id="b_9" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="143" y="299.864">b</tspan></text>
+                            <text id="b_10" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="90" y="284.864">b</tspan></text>
+                            <text id="b_11" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="208" y="280.864">b</tspan></text>
+                            <text id="b_12" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="187" y="399.864">b</tspan></text>
+                            <text id="b_13" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="154" y="445.864">b</tspan></text>
+                            <text id="b_14" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="31" y="284.864">b</tspan></text>
+                            <text id="N2" fill="black" xml:space="preserve" style="white-space: pre" font-family="Microsoft Sans Serif" font-size="12" letter-spacing="0em"><tspan x="150" y="193.864">N2</tspan></text>
+                        </g>
                     
-                </svg>
+                        <g id="Arrows">
+                            <path id="Arrow 11" d="M157 138L151.226 148H162.774L157 138ZM158 166V147H156V166H158Z" fill="black"/>
+                            <path id="Arrow 23" d="M135 189L125 183.226V194.774L135 189ZM107 190H126V188H107V190Z" fill="black"/>
+                            <path id="Arrow 25" d="M135 408L125 402.226V413.774L135 408ZM107 409H126V407H107V409Z" fill="black"/>
+                            <path id="Arrow 21" d="M157 239L162.774 229H151.226L157 239ZM156 211V230H158V211H156Z" fill="black"/>
+                            <path id="Arrow 32" d="M408 186L398 180.226V191.774L408 186ZM380 187H399V185H380V187Z" fill="black"/>
+                            <path id="Arrow 35" d="M464.799 151L453.645 153.989L461.81 162.154L464.799 151ZM445.707 171.506L459.142 158.071L457.728 156.657L444.293 170.092L445.707 171.506Z" fill="black"/>
+                            <path id="Arrow 37" d="M504.824 207.528L515.977 204.539L507.812 196.374L504.824 207.528ZM511.895 201.871L546.884 166.882L545.469 165.468L510.48 200.457L511.895 201.871Z" fill="black"/>
+                            <path id="Arrow 38" d="M505 164L507.989 175.154L516.154 166.989L505 164ZM510.657 171.071L545.646 206.06L547.06 204.646L512.071 169.657L510.657 171.071Z" fill="black"/>
+                            <path id="Arrow 36" d="M464.799 221.799L461.81 210.645L453.645 218.81L464.799 221.799ZM444.293 202.707L457.728 216.142L459.142 214.728L445.707 201.293L444.293 202.707Z" fill="black"/>
+                            <path id="Arrow 33" d="M538 151L528 145.226V156.774L538 151ZM510 152H529V150H510V152Z" fill="black"/>
+                            <path id="Arrow 22" d="M157 312L162.774 302H151.226L157 312ZM156 284V303H158V284H156Z" fill="black"/>
+                            <path id="Arrow 28" d="M230 211L220.857 218.052L231.536 222.444L230 211ZM179.925 335.38L227.501 219.704L225.652 218.943L178.075 334.62L179.925 335.38Z" fill="black"/>
+                            <path id="Arrow 31" d="M208 189L198.942 196.162L209.674 200.425L208 189ZM179.929 262.369L205.607 197.733L203.748 196.995L178.071 261.631L179.929 262.369Z" fill="black"/>
+                            <path id="Arrow 29" d="M230 166L231.503 154.551L220.837 158.974L230 166ZM178.076 43.383L225.629 158.069L227.477 157.303L179.924 42.617L178.076 43.383Z" fill="black"/>
+                            <path id="Arrow 30" d="M208 189L209.674 177.575L198.942 181.838L208 189ZM178.071 116.369L203.748 181.005L205.607 180.267L179.929 115.631L178.071 116.369Z" fill="black"/>
+                            <path id="Arrow 24" d="M84 385L89.7735 375H78.2265L84 385ZM83 211L83 376H85L85 211H83Z" fill="black"/>
+                            <path id="Arrow 26" d="M208 408L198 402.226V413.774L208 408ZM180 409H199V407H180V409Z" fill="black"/>
+                            <path id="Arrow 34" d="M538 222L528 216.226V227.774L538 222ZM510 223H529V221H510V223Z" fill="black"/>
+                            <path id="Arrow 20" d="M157 65L151.226 75H162.774L157 65ZM158 93V74H156V93H158Z" fill="black"/>
+                            <path id="Rectangle 1" d="M136.5 116L126.5 110.226V121.774L136.5 116ZM59 117H127.5V115H59V117ZM46 394V130H44V394H46ZM64 407H59V409H64V407ZM44 394C44 402.284 50.7157 409 59 409V407C51.8203 407 46 401.18 46 394H44ZM59 115C50.7157 115 44 121.716 44 130H46C46 122.82 51.8203 117 59 117V115Z" fill="black"/>
+                            <path id="Rectangle 2" d="M84 430L78.2265 440H89.7735L84 430ZM85 440V439H83V440H85ZM216 453H98V455H216V453ZM229 430V440H231V430H229ZM216 455C224.284 455 231 448.284 231 440H229C229 447.18 223.18 453 216 453V455ZM83 440C83 448.284 89.7157 455 98 455V453C90.8203 453 85 447.18 85 440H83Z" fill="black"/>
+                            <path id="Vector 1" d="M335 186L325 180.226V191.774L335 186ZM180 336H296.271V334H180V336ZM316.271 187H326V185H316.271V187ZM307.271 325V253.727H305.271V325H307.271ZM307.271 253.727V196H305.271V253.727H307.271ZM316.271 185C310.196 185 305.271 189.925 305.271 196H307.271C307.271 191.029 311.3 187 316.271 187V185ZM296.271 336C302.346 336 307.271 331.075 307.271 325H305.271C305.271 329.971 301.242 334 296.271 334V336Z" fill="black"/>
+                            <path id="Vector 4" d="M236.5 211.5L230.726 221.5H242.274L236.5 211.5ZM159.25 387.661L234.752 301.995L233.252 300.673L157.75 386.339L159.25 387.661ZM237.5 294.722V220.5H235.5V294.722H237.5ZM234.752 301.995C236.523 299.986 237.5 297.4 237.5 294.722H235.5C235.5 296.913 234.701 299.029 233.252 300.673L234.752 301.995Z" fill="black"/>
+                            <path id="Vector 2" d="M357 164L362.773 154H351.226L357 164ZM179 46H347V44H179V46ZM356 55V155H358V55H356ZM347 46C351.971 46 356 50.0294 356 55H358C358 48.9249 353.075 44 347 44V46Z" fill="black"/>
+                            <path id="Vector 3" d="M357 208L362.774 218H351.226L357 208ZM253 407H347V409H253V407ZM356 398V217H358V398H356ZM347 407C351.971 407 356 402.971 356 398H358C358 404.075 353.075 409 347 409V407Z" fill="black"/>
+                            <path id="Ellipse 1" d="M253.06 193.391L255.496 204.678L264.053 196.926L253.06 193.391ZM277.11 188.613L276.11 188.612L277.11 188.613ZM274.274 180.682L273.501 181.316L274.274 180.682ZM258.243 200.514C260.998 201.987 264.177 202.46 267.241 201.851L266.851 199.889C264.241 200.408 261.533 200.006 259.187 198.751L258.243 200.514ZM267.241 201.851C270.304 201.242 273.062 199.59 275.044 197.177L273.498 195.907C271.81 197.964 269.46 199.371 266.851 199.889L267.241 201.851ZM275.044 197.177C277.026 194.763 278.109 191.736 278.11 188.613L276.11 188.612C276.109 191.273 275.186 193.851 273.498 195.907L275.044 197.177ZM278.11 188.613C278.111 185.49 277.028 182.463 275.047 180.048L273.501 181.316C275.188 183.373 276.11 185.952 276.11 188.612L278.11 188.613ZM275.047 180.048C273.067 177.633 270.31 175.98 267.246 175.37L266.856 177.331C269.465 177.851 271.814 179.259 273.501 181.316L275.047 180.048ZM267.246 175.37C264.183 174.76 261.003 175.231 258.249 176.703L259.191 178.467C261.538 177.213 264.247 176.812 266.856 177.331L267.246 175.37ZM258.249 176.703C255.494 178.174 253.334 180.556 252.139 183.441L253.986 184.207C255.005 181.749 256.844 179.72 259.191 178.467L258.249 176.703Z" fill="black"/>
+                            <path id="Ellipse 2" d="M566.451 128.764L577.482 125.351L569.01 117.505L566.451 128.764ZM559.586 105.225L559.674 106.222L559.586 105.225ZM551.935 108.744L552.634 109.459L551.935 108.744ZM573.094 122.978C574.32 120.105 574.512 116.897 573.638 113.898L571.718 114.458C572.463 117.012 572.299 119.746 571.254 122.193L573.094 122.978ZM573.638 113.898C572.763 110.9 570.876 108.297 568.298 106.534L567.169 108.185C569.365 109.687 570.973 111.904 571.718 114.458L573.638 113.898ZM568.298 106.534C565.72 104.771 562.611 103.957 559.499 104.229L559.674 106.222C562.324 105.989 564.973 106.683 567.169 108.185L568.298 106.534ZM559.499 104.229C556.388 104.502 553.467 105.845 551.235 108.029L552.634 109.459C554.535 107.598 557.023 106.454 559.674 106.222L559.499 104.229ZM551.235 108.029C549.003 110.214 547.597 113.105 547.258 116.21L549.246 116.427C549.535 113.782 550.733 111.32 552.634 109.459L551.235 108.029ZM547.258 116.21C546.918 119.315 547.666 122.441 549.373 125.057L551.048 123.963C549.593 121.735 548.957 119.072 549.246 116.427L547.258 116.21ZM549.373 125.057C551.08 127.672 553.641 129.615 556.62 130.553L557.221 128.646C554.684 127.846 552.502 126.191 551.048 123.963L549.373 125.057Z" fill="black"/>
+                            <path id="Ellipse 3" d="M554.904 243.591L543.873 247.005L552.345 254.851L554.904 243.591ZM561.769 267.13L561.682 266.134L561.769 267.13ZM569.421 263.611L568.721 262.896L569.421 263.611ZM548.262 249.377C547.035 252.25 546.843 255.459 547.718 258.457L549.638 257.897C548.893 255.343 549.056 252.61 550.101 250.163L548.262 249.377ZM547.718 258.457C548.592 261.456 550.479 264.058 553.057 265.821L554.186 264.17C551.99 262.668 550.382 260.451 549.638 257.897L547.718 258.457ZM553.057 265.821C555.635 267.584 558.745 268.399 561.856 268.126L561.682 266.134C559.031 266.366 556.382 265.672 554.186 264.17L553.057 265.821ZM561.856 268.126C564.968 267.853 567.888 266.51 570.12 264.326L568.721 262.896C566.82 264.757 564.332 265.902 561.682 266.134L561.856 268.126ZM570.12 264.326C572.352 262.141 573.758 259.25 574.098 256.145L572.109 255.928C571.82 258.573 570.623 261.036 568.721 262.896L570.12 264.326ZM574.098 256.145C574.437 253.041 573.69 249.914 571.983 247.299L570.308 248.392C571.762 250.62 572.399 253.283 572.109 255.928L574.098 256.145ZM571.983 247.299C570.275 244.683 567.714 242.741 564.735 241.802L564.134 243.709C566.672 244.509 568.854 246.164 570.308 248.392L571.983 247.299Z" fill="black"/>
+                            <path id="Ellipse 4" d="M478.922 194.324L478.137 194.943H478.137L478.922 194.324ZM478.405 178.126L479.229 178.693L478.405 178.126ZM485.17 173L473.713 174.437L480.686 183.641L485.17 173ZM486.259 198.034C483.673 197.34 481.375 195.822 479.708 193.705L478.137 194.943C480.069 197.397 482.735 199.159 485.741 199.966L486.259 198.034ZM479.708 193.705C478.041 191.588 477.093 188.984 477.006 186.279L475.007 186.343C475.107 189.473 476.204 192.489 478.137 194.943L479.708 193.705ZM477.006 186.279C476.92 183.574 477.7 180.914 479.229 178.693L477.582 177.559C475.81 180.133 474.908 183.213 475.007 186.343L477.006 186.279Z" fill="black"/>
+                            <path id="Ellipse 5" d="M496.078 177.676L496.863 177.057H496.863L496.078 177.676ZM496.595 193.874L495.771 193.307L496.595 193.874ZM489.83 199L501.287 197.563L494.314 188.359L489.83 199ZM488.741 173.966C491.327 174.66 493.625 176.178 495.292 178.295L496.863 177.057C494.931 174.603 492.265 172.841 489.259 172.034L488.741 173.966ZM495.292 178.295C496.959 180.412 497.907 183.016 497.994 185.721L499.993 185.657C499.893 182.527 498.796 179.511 496.863 177.057L495.292 178.295ZM497.994 185.721C498.08 188.426 497.3 191.086 495.771 193.307L497.418 194.441C499.19 191.867 500.092 188.787 499.993 185.657L497.994 185.721Z" fill="black"/>
+                        </g>
+                    
+                        <g id="Nodes">
+                            <circle id="trapNode" cx="230.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="endNode2Let" cx="560.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="endNode1Let" cx="560.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node13Let" cx="487.5" cy="221.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node12Let" cx="487.5" cy="150.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node11Let" cx="430.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node10Let" cx="357.5" cy="185.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node9Let" cx="230.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node8Let" cx="157.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node7Let" cx="84.5" cy="407.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node6Let" cx="157.5" cy="334.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node5Let" cx="157.5" cy="261.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node4Let" cx="157.5" cy="42.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node3Let" cx="157.5" cy="115.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="node2Let" cx="157.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                            <circle id="startNodeLet" cx="84.5" cy="188.5" r="21" stroke="black" stroke-width="3"/>
+                        </g>
+                        
+                    </svg>
+                </center>
                 <!-- <svg viewBox="0 0 627 474" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="Frame 3">
                     <rect width="627" height="474" fill="white"/>
@@ -364,7 +410,13 @@
                 <br>
             </div>
         </div>
+
+
         <br>
+
+        <div>
+
+        </div>
     </body>
 
     
