@@ -57,7 +57,7 @@
 }
 
 text{
-    font-family: 'Courier New', Courier, monospace;
+    font-family: sans-serif;
 }
 
 #cfgContainer{
@@ -75,9 +75,10 @@ text{
 }
 
 .buttonControls{
-    width:49%;
+    width:40%;
     height: 65px;
     font-size: large;
+    gap: 5px;
 }
 
 label{
@@ -85,6 +86,11 @@ label{
     font-size: xx-large;
 }
 
-#input string{
-    height: 100px;
+#inputString{
+    height: 65px;
+    font-size: large;
+}
+
+.cfgScreen{
+    font-family: sans-serif;
 }
