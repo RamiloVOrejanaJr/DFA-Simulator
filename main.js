@@ -11,9 +11,9 @@
     //  mismong circle sa html, ang node object ay ung data structure 
     class node{
         constructor(a, b, nodeID){
-            this.a = a;
-            this.b = b;
-            this.nodeID = (nodeID);
+            this.a = a; //equivalent to 1; data type = node object
+            this.b = b; //equivalent to 0; data type = node object
+            this.nodeID = (nodeID); //data type = ID of HTML element that represents node in SVG
         }
     }
     
@@ -67,6 +67,8 @@
     const node3Num = new node(null, node4Num, "node3Num");
     const node2Num = new node(node4Num, node3Num, "node2Num");      
         node3Num.a = node2Num;      
+
+    //                                                            1                  0                 HTML
     const startNodeNum = new node(node2Num, node3Num, "startNodeNum");
 
 //list of all nodes that the string has "traversed or visited", is used for showing the path through DFA
@@ -107,16 +109,13 @@ let is_string_valid = null;
     }
                    
     //get user inputted string
-    let inputString = document.getElementById("input string").value;
+    let inputString = document.getElementById("inputString").value;
 
     //iterate through every letter of string
-    for (const c of inputString){
-
-        //check if current letter is a or b 
-        //!!! unimplemented => needs check if user inputted string only consists of a and b)
+    for (const character of inputString){
 
         if (currentDFA == "DFA1"){
-            if (c == "a"){
+            if (character  == "a"){
                 //pushes the next node to the array containing all traversed nodes
                 //simulates that the string has passed this particular node's check and thus it's fine to go to next one
                 traversedNodes.push(currentNode.a.nodeID);
@@ -125,7 +124,7 @@ let is_string_valid = null;
                 //assumes that all nodes are connected to another node by a or b (which is true because DFA)
                 currentNode = currentNode.a;        
             }
-            else if (c == "b"){
+            else if (character  == "b"){
                 //all lines are identical to above if statements using 'a', just replaced with 'b'
                 traversedNodes.push(currentNode.b.nodeID);
                 currentNode = currentNode.b;                        
@@ -138,11 +137,11 @@ let is_string_valid = null;
         }
 
         else if (currentDFA == "DFA2"){
-            if (c == "1"){
+            if (character  == "1"){
                 traversedNodes.push(currentNode.a.nodeID);
                 currentNode = currentNode.a;        
             }
-            else if (c == "0" ){
+            else if (character  == "0" ){
                 traversedNodes.push(currentNode.b.nodeID);
                 currentNode = currentNode.b;                        
             }
@@ -151,9 +150,7 @@ let is_string_valid = null;
                 document.getElementById("result").innerHTML = "String should only consist of symbols '0' and '1'";
                 return                
             }
-        }
-
-        
+        }        
     }
 
     if (validNodes.includes(currentNode) ){
@@ -192,29 +189,24 @@ async function changeColor(){   //"async" keyword apparently required for "await
 function showStart(){ //things to show on startup of the web app
     document.getElementById("simulator").innerHTML = document.getElementById("DFA1").innerHTML;
     document.getElementById("regex").innerHTML = document.getElementById("regex1").innerHTML;
-    //document.getElementsByClassName("labels").style.fontFamily = "Is-serif";
 }
 
 function openDFA1(){ //changes current DFA being simulated to DFA number 1
-    //hides DFA2 and shows DFA1
-    // document.getElementById("DFA2").style.display = "none";
-    // document.getElementById("DFA1").style.display = "block";
 
+    document.getElementById("regex").innerHTML = document.getElementById("regex1").innerHTML;
     document.getElementById("simulator").innerHTML = document.getElementById("DFA1").innerHTML;
+    document.getElementById("cfgContainer").innerHTML = document.getElementById("CFG1").innerHTML;    
+    document.getElementById("pdaContainer").src = "PDA1.png";
     currentDFA = "DFA1"
     currentNode = startNodeLet
-    document.getElementById("regex").innerHTML = document.getElementById("regex1").innerHTML;
-    document.getElementById("pdaContainer").src = "PDA1.png";
 }
 
 function openDFA2(){ //changes current DFA being simulated to DFA number 1
-     //hides DFA1 and shows DFA2
-    // document.getElementById("DFA1").style.display = "none";
-    // document.getElementById("DFA2").style.display = "block";
-    
-    document.getElementById("simulator").innerHTML = document.getElementById("DFA2").innerHTML;
+      
+    document.getElementById("regex").innerHTML = document.getElementById("regex2").innerHTML;
+    document.getElementById("simulator").innerHTML = document.getElementById("DFA2").innerHTML;  
+    document.getElementById("cfgContainer").innerHTML = document.getElementById("CFG2").innerHTML;    
+    document.getElementById("pdaContainer").src = "PDA2.png";
     currentDFA = "DFA2"
     currentNode = startNodeNum
-    document.getElementById("regex").innerHTML = document.getElementById("regex2").innerHTML;
-    document.getElementById("pdaContainer").src = "PDA2.png";
 }
