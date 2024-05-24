@@ -18,13 +18,13 @@
         <div id="screen" >
             <div id="controls">
                 <label id="regex">Regex being simulated: (bab)*(b+a)(bab+aba)(a+b)*(aa+bb)*(b+a+bb)(a+b)*(aa+bb)</label>
-                <label for="input string">String to check:</label>
-                <input type="text" id="input string" >
+                <label for="inputString">String to check:</label>
+                <input type="text" id="inputString">
                 <br><br>
                 <button type="button" class="buttonControls" onclick =getTraversedNodes()>Validate String</button>
-                <button type="button" class="buttonControls" onclick =simulateDFA()>Simulate String</button>
+                <button type="button" class="buttonControls" onclick =simulateDFA()>Simulate DFA</button>
                 <br><br><br>
-                <label style="font-size: xxx-large;" id="result">⠀<br></label>
+                <label style="font-size: xxx-large;" id="result">Input a string!<br></label>
             </div>
 
             <div id="simulator">
@@ -33,17 +33,16 @@
         <br>
 
         <div id="screen" >
-            <div id="cfgContainer">
+            <div id="cfgContainer" class="cfgScreen">
                 <text id>CFG:<br>
-
-                    S-> BCDABEFAB <br>
-                    A->1|0<br>
-                    B-> 1B|0B|null<br>
-                    C-> 11|00<br>
-                    D-> 11D|00D|null<br>
-                    E-> 101|111<br>
-                    F-> 101F|111F|null<br>
-                    </text>
+                    S -> ABCDEFDG<br>
+                    A -> babA | null<br>
+                    B -> b | a <br>
+                    C -> bab | aba<br>
+                    D -> aD | bD | null<br>
+                    E -> aaE | bbE | null<br>
+                    F -> b | a | bb<br>
+                    G -> aa | bb<br>
             </div>
 
             <div id="PDA">
@@ -60,20 +59,30 @@
             <label id="regex1">Regex being simulated: <br>(bab)*(b+a)(bab+aba)(a+b)*(aa+bb)*(b+a+bb)(a+b)*(aa+bb)<br><br></label>
             <label id="regex2">Regex being simulated: <br>(1+0)*(11+00)(00+11)*(1+0+11)(1+0+11)*(101+111)(101+111)*(1+0*+11)(1+0*+11)*<br><br></label>
 
-            <text id="CFG1">CFG:<br>
-                S-> BCDABEFAB <br>
+            <text id="CFG1" class="cfgScreen">CFG:<br>
+                S -> ABCDEFDG<br>
+                A -> babA | null<br>
+                B -> b | a <br>
+                C -> bab | aba<br>
+                D -> aD | bD | null<br>
+                E -> aaE | bbE | null<br>
+                F -> b | a | bb<br>
+                G -> aa | bb<br>
+            </text>
+
+            <text id="CFG2" class="cfgScreen">
+
+                CFG:<br>
+                S-> BCDABEFGB <br>
                 A->1|0<br>
                 B-> 1B|0B|null<br>
                 C-> 11|00<br>
                 D-> 11D|00D|null<br>
                 E-> 101|111<br>
                 F-> 101F|111F|null<br>
-            </text>
-
-            <text id="CFG2">
+                G-> 1|0|11|null<br>
 
             </text>
-
 
             <div id="DFA1">
                 
